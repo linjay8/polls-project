@@ -2,13 +2,13 @@ import java.util.ArrayList;
 
 public class User extends Thread
 {
-	private String name;
-	private String email;
-	private int accountLevel;    // guest = 0,  student = 1,  instructor = 2
-	private int userId;
-	private ArrayList<Poll> publicPolls;
+	protected String name;
+	protected String email;
+	protected int accountLevel;    // guest = 0,  student = 1,  instructor = 2
+	protected String userId;
+//	protected ArrayList<Poll> publicPolls;
 
-	public User(String name_, String email_, int accountLevel_, int userId_)
+	public User(String name_, String email_, int accountLevel_, String userId_)
 	{
 		name = name_;
 		email = email_;
@@ -21,16 +21,16 @@ public class User extends Thread
 		name = "";
 		email = "";
 		accountLevel = -1;
-		userId = -1;
+		userId = "";
 	}
 
-	public ArrayList<Poll> getPublicPolls()
-	{
-		// Database query
-		// Save info to publicPolls
-
-		return publicPolls;
-	}
+//	public ArrayList<Poll> getPublicPolls()
+//	{
+//		// Database query
+//		// Save info to publicPolls
+//
+//		return publicPolls;
+//	}
 
 	public String getFullName()
 	{
@@ -47,13 +47,13 @@ public class User extends Thread
 		return accountLevel;
 	}
 
-	public int getUserId()
+	public String getUserId()
 	{
 		return userId;
 	}
 
-	public void addPublicPoll(Poll p)
-	{
-		publicPolls.add(p);
-	}
+//	public void addPublicPoll(Poll p)
+//	{
+//		publicPolls.add(p);
+//	}
 }

@@ -6,7 +6,7 @@ USE FinalProject;
 CREATE TABLE UserInfo (
 	userID VARCHAR(500) NOT NULL PRIMARY KEY,
     firstname VARCHAR(200) NOT NULL,
-    lastname VARCHAR(200) NOT NULL,
+    lastname VARCHAR(200) NOT NULL,	
     email VARCHAR(200) NOT NULL UNIQUE,
     accountlevel INT NOT NULL
 );
@@ -54,7 +54,6 @@ CREATE TABLE UserResponse (
     FOREIGN KEY (responseID) REFERENCES Response(responseID)
 );
 
-SELECT s.* FROM UserInfo s WHERE s.userID = 'login2';
 SELECT * FROM UserInfo;
 SELECT * FROM Class;
 SELECT * FROM ClassMember;

@@ -1,3 +1,4 @@
+package models;
 public class Guest extends User{
 
     public Guest(String name_, String email_, int userId_){

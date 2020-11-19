@@ -1,27 +1,33 @@
+package models;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class Poll {
     private int pollID;
     private int voterCount = 0 ;
     private Instructor creator;
     private Class myClass;
-  //  private Boolean resultVisibility;
     private Boolean isPublic;
     private ArrayList<Response> options;   // List of possible answers (a, b, c, d)
+    private String question;
+    private int responseListID;
+    
+    
     private ArrayList<Student> studentList;
     private Map<Integer, Integer> voteMap = new HashMap<Integer, Integer>();
     private Map<Integer, ArrayList<Student>> studentResponders = new HashMap<Integer, ArrayList<Student>>();
 
 
 
-    public Poll(int _pollID, Instructor _creator, Class _myClass, Boolean _isPublic,
+    public Poll(int _pollID, Instructor _creator, Class _myClass, Boolean _isPublic, String _question,
                 ArrayList<Response> _options, ArrayList<Student> _studentList){
        pollID = _pollID;
        creator = _creator;
        myClass = _myClass;
        isPublic = _isPublic;
+       question = _question;
        options = _options;
        studentList = _studentList;
 
@@ -29,6 +35,10 @@ public class Poll {
             voteMap.put(r.getResponseID(), 0);
             studentResponders.put(r.getResponseID(), new ArrayList<Student>());
         }
+        
+        Random rand = new Random();
+        responseListID = rand.nextInt(1000);
+        
 
     }
 
@@ -61,6 +71,18 @@ public class Poll {
 
     public int getVoterCount(){
         return voterCount;
+    }
+    
+    public String getQuestion() {
+    	return question;
+    }
+    
+    public int getResponseListID() {
+    	return responseListID;
+    }
+    
+    public ArrayList<Response> getOptions() {
+    	return options;
     }
 
     // Determines if poll is visible based on User type

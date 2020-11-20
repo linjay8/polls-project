@@ -1,8 +1,11 @@
 package models;
+
+import java.time.ZoneId;
 import java.util.ArrayList;
 
+
 public class Class {
-    // instructor, student list
+	    // instructor, student list
     private ArrayList<Poll> pollList;
 
     public Class(){
@@ -12,4 +15,5 @@ public class Class {
     public ArrayList<Poll> getPollList() {
         return pollList;
     }
+    
 }

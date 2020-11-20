@@ -19,7 +19,7 @@ import models.*;
 import javax.servlet.annotation.WebServlet;
 
 
-@WebServlet("/Dispatcher")
+@WebServlet("/PollCreation")
 public class PollCreation extends HttpServlet
 {
 	Instructor instructor;

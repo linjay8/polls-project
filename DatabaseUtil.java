@@ -126,7 +126,7 @@ public class DatabaseUtil {
 	// Returns a student from the database, null if they do not exist
 	public static Student getStudent(String userId)
 	{
-		String sql = "SELECT s.* FROM UserInfo s WHERE s.userID = ?";
+		String sql = "SELECT s.* FROM UserInfo s WHERE s.userID = ? AND s.accountlevel = 2";
 		Student s = null;
 		try(Connection conn = DriverManager.getConnection(db, user, pwd);
 				PreparedStatement ps = conn.prepareStatement(sql);)
@@ -149,7 +149,7 @@ public class DatabaseUtil {
 	// Returns an instructor from the database, null if they do not exist
 	public static Instructor getInstructor(String userId)
 	{
-		String sql = "SELECT i.* FROM UserInfo i WHERE i.userID = ?";
+		String sql = "SELECT i.* FROM UserInfo i WHERE i.userID = ? AND i.accountlevel = 1";
 		Instructor i = null;
 		try(Connection conn = DriverManager.getConnection(db, user, pwd);
 				PreparedStatement ps = conn.prepareStatement(sql);)
@@ -261,12 +261,13 @@ public class DatabaseUtil {
 	public static ArrayList<Class> getClassesFromInstructor(Instructor i)
 	{
 		String instructorId = i.getUserId();
-		String sql = "SELECT c.* FROM UserInfo i, Class c WHERE c.instructorID = ?";
+		String sql = "SELECT c.* FROM UserInfo i, Class c WHERE c.instructorID = ? AND i.userID = ?";
 		ArrayList<Class> classes = new ArrayList<Class>();
 		try(Connection conn = DriverManager.getConnection(db, user, pwd);
 				PreparedStatement ps = conn.prepareStatement(sql);)
 		{
 			ps.setString(1, instructorId);
+			ps.setString(2, instructorId);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next())
 			{

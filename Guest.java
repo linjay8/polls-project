@@ -1,7 +1,7 @@
 public class Guest extends User
 {
 
-	public Guest(String name_, String email_, int userId_)
+	public Guest(String name_, String email_, String userId_)
 	{
 		super( name_,  email_,  0,  userId_);
 	}

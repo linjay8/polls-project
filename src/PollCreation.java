@@ -23,7 +23,7 @@ import javax.servlet.annotation.WebServlet;
 public class PollCreation extends HttpServlet
 {
 	Instructor instructor;
-	Class myClass;
+
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
@@ -68,10 +68,14 @@ public class PollCreation extends HttpServlet
 		
 		
 
+		//Check that Class code exists
+		
 		if (answers.size() < 2) {
 			out.println("<h4>Please give at least two possible answers</h4>"); 
 			request.getRequestDispatcher("/CheckBox.html").include(request, response);
 		}
+		
+		
 		
 		// Check that exactly one box was selected
 		else if ((privateCheckbox.contentEquals("") && publicCheckbox.contentEquals(""))
@@ -103,7 +107,7 @@ public class PollCreation extends HttpServlet
 //			 Initialize poll variables
 //			 Poll ID
 			Random rand = new Random();
-			int pollId = rand.nextInt(1000);
+			int pollId = rand.nextInt(1000000000);
 			
 			// Visibility
 			boolean isPublic;
@@ -122,12 +126,10 @@ public class PollCreation extends HttpServlet
 				responseList.add(r);	
 			}
 			
-			Poll poll = new Poll(pollId, instructor, myClass, isPublic, question, responseList, studentList);
+			Poll poll = new Poll(pollId, instructor, classCode,  isPublic, question, responseList, studentList);
 	        PollDatabaseHandler handler = new PollDatabaseHandler(poll);
 	        try {
 	        	 handler.savePoll();
-	        	 
-	        	 
 	        }
 	        catch (SQLException e) {
 	        	e.printStackTrace();

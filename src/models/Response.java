@@ -8,9 +8,8 @@ public class Response {
     public Response(String _text){
         text = _text;
     	Random rand = new Random();
-    	responseID = rand.nextInt(1000);
+    	responseID = rand.nextInt(1000000000);
 
-        
     }
 
 

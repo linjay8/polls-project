@@ -8,7 +8,7 @@ public class Poll {
     private int pollID;
     private int voterCount = 0 ;
     private Instructor creator;
-    private Class myClass;
+    private String classCode;
     private Boolean isPublic;
     private ArrayList<Response> options;   // List of possible answers (a, b, c, d)
     private String question;
@@ -21,11 +21,11 @@ public class Poll {
 
 
 
-    public Poll(int _pollID, Instructor _creator, Class _myClass, Boolean _isPublic, String _question,
+    public Poll(int _pollID, Instructor _creator, String _classCode, Boolean _isPublic, String _question,
                 ArrayList<Response> _options, ArrayList<Student> _studentList){
        pollID = _pollID;
        creator = _creator;
-       myClass = _myClass;
+       classCode = _classCode;
        isPublic = _isPublic;
        question = _question;
        options = _options;
@@ -107,6 +107,10 @@ public class Poll {
 
     public Boolean isPublic(){
         return isPublic;
+    }
+    
+    public String getClassCode() {
+    	return classCode;
     }
 
     public int getResponseCount(int responseID){

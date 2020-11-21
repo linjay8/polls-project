@@ -57,7 +57,7 @@ CREATE TABLE Poll(
 -- );
 
 CREATE TABLE Responses(
-	responseID int,
+	responseID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
     response varchar(500),
     numVotes int,
     questionID int
@@ -70,8 +70,8 @@ CREATE TABLE UserResponse (
     questionID INT NOT NULL,
     responseID INT NOT NULL,
     FOREIGN KEY (studentID) REFERENCES UserInfo(userID),
-    FOREIGN KEY (questionID) REFERENCES Poll(questionID),
-    FOREIGN KEY (responseID) REFERENCES Response(responseID)
+    FOREIGN KEY (questionID) REFERENCES Poll(id),
+    FOREIGN KEY (responseID) REFERENCES Responses(responseID)
 );
 
  CREATE TABLE chat (
@@ -90,6 +90,6 @@ SELECT * FROM UserInfo;
 SELECT * FROM Class;
 SELECT * FROM ClassMember;
 SELECT * FROM Poll;
-SELECT * FROM Response;
+SELECT * FROM Responses;
 SELECT * FROM UserResponse;
 SELECT * FROM chat;

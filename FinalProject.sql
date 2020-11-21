@@ -74,12 +74,22 @@ CREATE TABLE UserResponse (
     FOREIGN KEY (responseID) REFERENCES Response(responseID)
 );
 
+ CREATE TABLE chat (
+	id INT NOT NULL AUTO_INCREMENT,
+	sender_id INT NOT NULL,
+	recipient_id INT NOT NULL,
+	chat_id VARCHAR(200) NOT NULL,
+	message VARCHAR(2000) NOT NULL,
+	time DATETIME NOT NULL,
+	PRIMARY KEY (`id`),
+	FOREIGN KEY (sender_id) REFERENCES UserInfo(userID),
+	FOREIGN KEY (recipient_id) REFERENCES UserInfo(userID)
+  );
+
 SELECT * FROM UserInfo;
 SELECT * FROM Class;
 SELECT * FROM ClassMember;
 SELECT * FROM Poll;
 SELECT * FROM Response;
 SELECT * FROM UserResponse;
-
-
-
+SELECT * FROM chat;

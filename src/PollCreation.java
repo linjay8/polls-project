@@ -5,16 +5,11 @@ import java.sql.SQLException;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
-import models.Class;
-import models.Instructor;
-import models.Poll;
-import models.Response;
-import models.Student;
+import models.*;
+
 
 import java.util.ArrayList;
 import java.util.Random;
-
-import models.*;
 
 import javax.servlet.annotation.WebServlet;
 

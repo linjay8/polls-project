@@ -8,8 +8,8 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.WebServlet;
 
-@WebServlet("/PollResponse")
-public class PollResponse extends HttpServlet
+@WebServlet("/PublicPollList")
+public class PublicPollList extends HttpServlet
 {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
@@ -17,23 +17,23 @@ public class PollResponse extends HttpServlet
 		PrintWriter out = response.getWriter();
 		
 		// Variables to help print results
-		int classCode = Integer.parseInt(request.getParameter("classCode"));
+//		String studentId = request.getParameter("studentId");
 		PollDatabaseHandler dbHandler = new PollDatabaseHandler();
 		try{
-			String title = "Using GET Method to Read Form Data";
+			String title = "Public Polls";
 			out.println("<html>");
 			out.println("<head><title>" + title + "</title></head>");
 			out.println("<body>");
-			out.println("<h4>Results in java</h4>");
+			out.println("<h4>Public Polls</h4>");
 			
 			
 			// For each poll in class, print answer choice with count
 			// Must verify that student has not answered poll
-			for (int pollId : dbHandler.getPollId(classCode)) {
+			for (int pollId : dbHandler.getPollIdList()) {
 				ArrayList<String> resultList = dbHandler.getPollResults(pollId);
 				
 				out.print("<div>");
-				out.print("<form name=" + pollId + " action=\"PollSubmission.html\" method=GET>" );
+				out.print("<form name=" + pollId + " action=\"PollSubmission\" method=GET>" );
 				
 				out.print("\n" + "  <li><b>Question</b>: " 
 						+ dbHandler.getQuestion(pollId) +  "\n" );
@@ -41,8 +41,14 @@ public class PollResponse extends HttpServlet
 			            out.print(" <li>" + resultList.get(i) +" \n");
 			     }
 				out.print( "</ul>");
+				out.print( "<br></br>");
+
+				// Pass hidden variables to next page
+				out.print("<input type = \"hidden\" name = \"pollId\" id = \"pollId\" value = " + pollId + ">");
+			//	out.print("<input type = \"hidden\" name = \"classCode\" value = " + classCode+ ">");
+//				out.print("<input type = \"hidden\" name = \"studentId\" value = " + studentId+ ">");
 				
-				out.print("<input type = \"submit\" value = \"Submit\" /> ");
+				out.print("<input type = \"submit\" value = \"Answer this poll\" /> ");
 				out.print("</form>");
 				out.print("</div> <br><br>");
 			}

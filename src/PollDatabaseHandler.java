@@ -49,7 +49,12 @@ public class PollDatabaseHandler {
 		PS.setInt(2, 0);
 		PS.setBoolean(3, poll.isPublic());
 		PS.setString(4,  poll.getQuestion());
-		PS.setString(5, poll.getClassCode());
+		
+		if (poll.getClassCode().equals(""))
+			PS.setString(5, null);
+		else
+			PS.setString(5, poll.getClassCode());
+			
 		this.saveResponses(connection);
 
 		// Add 5 and 6?
@@ -80,7 +85,6 @@ public class PollDatabaseHandler {
 		connection.close();
 		
 		return output;
-
 	}
 	
 	public ArrayList<Integer> getPollResultCount(int pollId) throws SQLException{
@@ -89,7 +93,7 @@ public class PollDatabaseHandler {
 		String jdbcURL = "jdbc:mysql://localhost:3306/Polling";
 		String dbUser = "root";
 		String dbPassword = "root";
-		
+	
 		Connection connection = DriverManager.getConnection(jdbcURL, dbUser, dbPassword);
 		String sql = "Select count from Responses "
 				+ "Inner join Poll on Poll.id = Responses.questionID "
@@ -126,8 +130,34 @@ public class PollDatabaseHandler {
 		return output;
 	}
 	
+	
+	// Functions to get all Poll ID's
+		public ArrayList<Integer> getPollIdList() throws SQLException{
+			ArrayList<Integer> output = new ArrayList<Integer>();
+			
+			String jdbcURL = "jdbc:mysql://localhost:3306/Polling";
+			String dbUser = "root";
+			String dbPassword = "root";
+			
+			Connection connection = DriverManager.getConnection(jdbcURL, dbUser, dbPassword);
+			String sql = "SELECT id FROM Poll Where isPublic=true;";
+			PreparedStatement PS = connection.prepareStatement(sql);
+			ResultSet rs = PS.executeQuery();
+			
+			while (rs.next()) {
+	            output.add(rs.getInt(1));
+	        }
+
+			connection.close();
+			
+			return output;
+		}
+		
+		
+		
+	
 	// Functions to get poll information by classId
-	public ArrayList<Integer> getPollId(int classId) throws SQLException {
+	public ArrayList<Integer> getPollIdByClass(int classId) throws SQLException {
 		ArrayList<Integer> output = new ArrayList<Integer>();
 		
 		String jdbcURL = "jdbc:mysql://localhost:3306/Polling";
@@ -149,4 +179,6 @@ public class PollDatabaseHandler {
 		return output;
 		
 	}
+	
+	
 }

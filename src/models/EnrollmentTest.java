@@ -1,4 +1,4 @@
-
+package models;
 public class EnrollmentTest {
 	public static void main(String[] args) 
 	{

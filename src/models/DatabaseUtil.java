@@ -1,10 +1,11 @@
+package models;
 import java.sql.*;
 import java.util.ArrayList;
 import java.io.*;
 public class DatabaseUtil {
 	static String db = "jdbc:mysql://localhost:3306/FinalProject?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=America/Los_Angeles";
 	static String user = "root";
-	static String pwd = "password";
+	static String pwd = "root";
 	
 	// Adds a new class into the database
 	public static void addNewClass(Class c, int userId)

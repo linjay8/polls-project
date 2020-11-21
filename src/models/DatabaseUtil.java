@@ -27,10 +27,10 @@ public class DatabaseUtil {
 		}
 	}
 	
-	// Adds a new user into the database
-	public static void addNewUser(User u)
+	// Adds a new User into the database
+	public static void addNewUser(String name, String email, int accountLevel)
 	{
-		String[] names = u.getFullName().split(" ");
+		String[] names = name.split(" ");
 		String fname = names[0];
 		String lname = names[1];
 		String sql = "INSERT INTO UserInfo (firstname, lastname, email, accountlevel) "
@@ -40,8 +40,8 @@ public class DatabaseUtil {
 		{
 			ps.setString(1, fname);
 			ps.setString(2, lname);
-			ps.setString(3, u.getEmail());
-			ps.setInt(4, u.getAccountLevel());
+			ps.setString(3, email);
+			ps.setInt(4, accountLevel);
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -49,13 +49,13 @@ public class DatabaseUtil {
 	}
 	
 	// Checks if a user already exists in the database
-	public static boolean userExists(int userId)
+	public static boolean userExists(String email)
 	{
-		String sql = "SELECT COUNT(*) FROM UserInfo u WHERE u.userID = ?;";
+		String sql = "SELECT COUNT(*) FROM UserInfo u WHERE u.email = ?;";
 		try(Connection conn = DriverManager.getConnection(db, user, pwd);
 				PreparedStatement ps = conn.prepareStatement(sql);)
 		{
-			ps.setInt(1, userId);
+			ps.setString(1, email);
 			ResultSet rs = ps.executeQuery();
 			int count = 0;
 			if(rs.next())
@@ -124,21 +124,19 @@ public class DatabaseUtil {
 		return false;
 	}
 	
-	//not working
 	// Returns a student from the database, null if they do not exist
-	public static Student getStudent(int userId)
+	public static Student getStudent(String email)
 	{
-		String sql = "SELECT s.* FROM UserInfo s WHERE s.userID = ? AND s.accountlevel = 1";
+		String sql = "SELECT s.* FROM UserInfo s WHERE s.email = ?";
 		Student s = null;
 		try(Connection conn = DriverManager.getConnection(db, user, pwd);
 				PreparedStatement ps = conn.prepareStatement(sql);)
 		{
-			ps.setInt(1, userId);
+			ps.setString(1, email);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next())
 			{
 				String name = rs.getString("firstname") + " " + rs.getString("lastname");
-				String email = rs.getString("email");
 				int id = rs.getInt("userID");
 				s = new Student(name, email, id);
 			}
@@ -149,19 +147,18 @@ public class DatabaseUtil {
 	}
 	
 	// Returns an instructor from the database, null if they do not exist
-	public static Instructor getInstructor(int userId)
+	public static Instructor getInstructor(String email)
 	{
-		String sql = "SELECT i.* FROM UserInfo i WHERE i.userID = ? AND i.accountlevel = 2";
+		String sql = "SELECT i.* FROM UserInfo i WHERE i.email = ?";
 		Instructor i = null;
 		try(Connection conn = DriverManager.getConnection(db, user, pwd);
 				PreparedStatement ps = conn.prepareStatement(sql);)
 		{
-			ps.setInt(1, userId);
+			ps.setString(1, email);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next())
 			{
 				String name = rs.getString("firstname") + " " + rs.getString("lastname");
-				String email = rs.getString("email");
 				int id = rs.getInt("userID");
 				i = new Instructor(name, email, id);
 			}
@@ -263,13 +260,12 @@ public class DatabaseUtil {
 	public static ArrayList<Class> getClassesFromInstructor(Instructor i)
 	{
 		int instructorId = i.getUserId();
-		String sql = "SELECT c.* FROM UserInfo i, Class c WHERE c.instructorID = ? AND i.userID = ?";
+		String sql = "SELECT c.* FROM UserInfo i, Class c WHERE c.instructorID = ?";
 		ArrayList<Class> classes = new ArrayList<Class>();
 		try(Connection conn = DriverManager.getConnection(db, user, pwd);
 				PreparedStatement ps = conn.prepareStatement(sql);)
 		{
 			ps.setInt(1, instructorId);
-			ps.setInt(2, instructorId);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next())
 			{

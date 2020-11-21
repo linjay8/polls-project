@@ -1,4 +1,5 @@
 package models;
+
 import java.util.ArrayList;
 import java.time.*;
 import java.util.*;
@@ -13,10 +14,6 @@ public class Student extends User
     public Student(String name_, String email_, int userId_)
     {
         super(name_,  email_,  1,  userId_);
-        if(!DatabaseUtil.userExists(userId_))
-		{
-			DatabaseUtil.addNewUser(this);
-		}
         this.classes = DatabaseUtil.getClassesFromStudent(this);   
         inClass = null;
     }

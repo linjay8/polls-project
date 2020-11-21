@@ -124,10 +124,11 @@ public class DatabaseUtil {
 		return false;
 	}
 	
+	//not working
 	// Returns a student from the database, null if they do not exist
 	public static Student getStudent(int userId)
 	{
-		String sql = "SELECT s.* FROM UserInfo s WHERE s.userID = ? AND s.accountlevel = 2";
+		String sql = "SELECT s.* FROM UserInfo s WHERE s.userID = ? AND s.accountlevel = 1";
 		Student s = null;
 		try(Connection conn = DriverManager.getConnection(db, user, pwd);
 				PreparedStatement ps = conn.prepareStatement(sql);)
@@ -150,7 +151,7 @@ public class DatabaseUtil {
 	// Returns an instructor from the database, null if they do not exist
 	public static Instructor getInstructor(int userId)
 	{
-		String sql = "SELECT i.* FROM UserInfo i WHERE i.userID = ? AND i.accountlevel = 1";
+		String sql = "SELECT i.* FROM UserInfo i WHERE i.userID = ? AND i.accountlevel = 2";
 		Instructor i = null;
 		try(Connection conn = DriverManager.getConnection(db, user, pwd);
 				PreparedStatement ps = conn.prepareStatement(sql);)

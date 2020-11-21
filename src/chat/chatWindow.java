@@ -6,6 +6,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -22,24 +24,27 @@ public class chatWindow extends HttpServlet {
 	String senderName, recipientName;
 	public int senderId;
 	public int recipientIdFinal;
+	boolean verified = false;
 
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 
 		try (PrintWriter out = response.getWriter()) {
-
+			
+			
 			String message = request.getParameter("txtMsg"); // Extract Message
 			// session = request.getSession();
 			// session.setAttribute("recipientId", request.getParameter("recipient")); //
 			// Set Attribute
 			int recipientId;
-			senderId = 2;
+			senderId = 1;
 			if (request.getParameter("recipient") != null) {
 				recipientId = Integer.parseInt(request.getParameter("recipient"));
 				recipientIdFinal = recipientId;
+				verified = chatDB.verifyChat(senderId, recipientIdFinal);
 			}
-			if (!chatDB.verifyChat(senderId, recipientIdFinal, out)) {
+			if (!verified) {
 				out.println("<!DOCTYPE html>");
 				out.println("<html>");
 				out.println("<head>");
@@ -50,10 +55,6 @@ public class chatWindow extends HttpServlet {
 				out.println("</body>");
 				out.println("</html>");
 			} else {
-				// String recipientId = request.getAttribute("recipientId").toString();
-				// String recipientId = session.getAttribute("recipientId").toString();
-
-				senderName = chatDB.getNameFromId(senderId);
 				recipientName = chatDB.getNameFromId(recipientIdFinal);
 				// senderId = session.getAttribute("userId").toString();
 
@@ -67,18 +68,22 @@ public class chatWindow extends HttpServlet {
 				out.println("  <body>");
 				out.println("      <form name=\"chatWindow\" action=\"chatWindow\">");
 				out.println(
-						"Message: <input type=\"text\" name=\"txtMsg\" value=\"\" /><input type=\"submit\" value=\"Send\" name=\"cmdSend\"/>");
+						"Enter Message: <input type=\"text\" name=\"txtMsg\" value=\"\" /><input type=\"submit\" value=\"Send\" name=\"cmdSend\"/>");
 				out.println("<br><br> <a href=\"chatWindow\">Refresh Chat Room</a>");
 				out.println("<br>  <br>");
 				out.println("Messages in Chat Box:");
 				out.println("<br>");
-				out.println("<textarea  readonly=\"readonly\"   name=\"txtMessage\" rows=\"20\" cols=\"60\">");
+				//out.println("<textarea  readonly=\"readonly\"   name=\"txtMessage\" rows=\"20\" cols=\"80\">");
 
 				// If enetered message != null then insert into database
 				if (request.getParameter("txtMsg") != null) {
-					chatDB.addNewMessage(message, senderId, recipientIdFinal);
-				}
+					if (message != "")
+						chatDB.addNewMessage(message, senderId, recipientIdFinal);
+				} 
+				
+				chatDB.loadChat(out, senderId, recipientIdFinal);
 				// Retrieve all messages from database
+				/*
 				try {
 					chatDB.viewMessages(out, senderId, recipientIdFinal);
 				} finally {
@@ -92,7 +97,7 @@ public class chatWindow extends HttpServlet {
 					// dispatcher.forward(request, response);
 					// request.getRequestDispatcher("/chatWindow").include(request, response);
 				}
-
+			*/
 			}
 		}
 
@@ -101,7 +106,6 @@ public class chatWindow extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// Session
 		session = request.getSession();
 		processRequest(request, response);
 

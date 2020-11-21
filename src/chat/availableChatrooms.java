@@ -34,16 +34,15 @@ public class availableChatrooms extends HttpServlet {
 		// recipient = request.getParameter("recipient").toString(); // Extract username
 		// senderId = session.getAttribute("userId").toString();
 		//need to get senderId from requestdispatcher? or a button that sends value to this servlet (URl query get)
-		senderId = 2;
+		senderId = 1;
 		PrintWriter out = response.getWriter();
 
 		try {
-			// ArrayList<String> list = chatDB.getAvailableStudents("a", out);
 			Student s2 = DatabaseUtil.getStudent(senderId);
 			Instructor i2 = null;
 			ArrayList<Class> classes = null;
 			boolean isInstructor = false;
-			;
+			
 			if (s2 != null) {
 				classes = DatabaseUtil.getClassesFromStudent(s2);
 			} else {

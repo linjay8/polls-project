@@ -2,6 +2,8 @@ package chat;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import models.Credentials;
 import models.DatabaseUtil;
@@ -22,16 +24,16 @@ public class chatDB {
 	public static void addNewMessage(String message, int senderId, int recipientId) {
 		String chatId = senderId + "_" + recipientId;
 		String driver = "com.mysql.jdbc.Driver";
-		String sql = "INSERT INTO chat (id, sender_id, recipient_id, chat_id, message, time) "
-				+ "VALUES (?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO chat (sender_id, recipient_id, chat_id, message, time) "
+				+ "VALUES (?, ?, ?, ?, ?)";
 		try (Connection conn = DriverManager.getConnection(db, user, pwd);
 				PreparedStatement ps = conn.prepareStatement(sql);) {
-			ps.setString(1, null);
-			ps.setInt(2, senderId);
-			ps.setInt(3, recipientId);
-			ps.setString(4, chatId);
-			ps.setString(5, message);
-			ps.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
+			//ps.setString(1, null);
+			ps.setInt(1, senderId);
+			ps.setInt(2, recipientId);
+			ps.setString(3, chatId);
+			ps.setString(4, message);
+			ps.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -67,9 +69,9 @@ public class chatDB {
 	// show students in class that you are currently enrolled in
 	// show professors of your classes
 	// those are the people you are allowed to message
-	public static boolean verifyChat(int senderId, int recipientId, PrintWriter out) {
-		ArrayList<Integer> availableR = getAvailableStudents(senderId, out);
-		ArrayList<Integer> availableS = getAvailableStudents(recipientId, out);
+	public static boolean verifyChat(int senderId, int recipientId) {
+		ArrayList<Integer> availableR = getAvailableStudents(senderId);
+		ArrayList<Integer> availableS = getAvailableStudents(recipientId);
 		if (availableR == null || availableS == null) {
 			return false;
 		}
@@ -79,7 +81,7 @@ public class chatDB {
 		return false;
 	}
 
-	public static ArrayList<Integer> getAvailableStudents(int senderId, PrintWriter out) {
+	public static ArrayList<Integer> getAvailableStudents(int senderId) {
 		Student s1 = DatabaseUtil.getStudent(senderId);
 		Instructor i1 = null;
 		ArrayList<Class> classes = new ArrayList<Class>();
@@ -125,5 +127,69 @@ public class chatDB {
 		}
 		return name;
 	}
+	public static String getMessageFromDB(String message, int senderId, int recipientId) {
+		String chatId1 = senderId + "_" + recipientId;
+		String chatId2 = recipientId + "_" + senderId;
+		String returnThis = null;
+		String driver = "com.mysql.jdbc.Driver";
+		String sql = "SELECT * FROM chat WHERE message = ? AND (chat_id = ? OR chat_id = ?)";
 
+		try (Connection conn = DriverManager.getConnection(db, user, pwd);
+				PreparedStatement ps = conn.prepareStatement(sql);) {
+			ps.setString(1, message);
+			ps.setString(2, chatId1);
+			ps.setString(3, chatId2);
+			ResultSet rs = ps.executeQuery();
+
+			// get the name of student here
+			while (rs.next()) {
+				returnThis = rs.getString(5);
+				
+			}
+			conn.close();
+			return returnThis;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return returnThis;
+	}
+	
+	public static void loadChat(PrintWriter out, int senderId, int recipientId) {
+		out.println("<textarea  readonly=\"readonly\"   name=\"txtMessage\" rows=\"100\" cols=\"100\">");
+		try {
+			chatDB.viewMessages(out, senderId, recipientId);
+		} finally {
+			out.println("</textarea>");
+			out.println("<hr>");
+			out.println("</form>");
+			out.println("</body>");
+			out.println("</html>");
+		}
+	}
+	public static ArrayList<String> allMessages(int senderId, int recipientId) {
+		String chatId1 = senderId + "_" + recipientId;
+		String chatId2 = recipientId + "_" + senderId;
+		ArrayList<String> list = new ArrayList<String>();
+		String driver = "com.mysql.jdbc.Driver";
+		String sql = "SELECT * FROM chat WHERE chat_id = ? OR chat_id = ?";
+
+		try (Connection conn = DriverManager.getConnection(db, user, pwd);
+				PreparedStatement ps = conn.prepareStatement(sql);) {
+			ps.setString(1, chatId1);
+			ps.setString(2, chatId2);
+			ResultSet rs = ps.executeQuery();
+
+			// get the name of student here
+			while (rs.next()) {
+				list.add(rs.getString(5));
+			}
+			conn.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 }
+

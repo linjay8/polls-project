@@ -1,3 +1,4 @@
+package Polling;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -12,6 +13,11 @@ public class PollDatabaseHandler {
 	Poll poll;
 	int classCode;
 	
+	String jdbcURL = "jdbc:mysql://localhost:3306/FinalProject";
+	String dbUser = "root";
+	String dbPassword = "root";
+	
+	
 	public PollDatabaseHandler(Poll poll) {
 		this.poll = poll;
 	}
@@ -23,7 +29,7 @@ public class PollDatabaseHandler {
 	public void saveResponses(Connection connection) throws SQLException{
 		// Helper called from savePoll()
 		for (Response r : poll.getOptions()) {
-			String sql = "INSERT INTO Responses (responseID, response, numVotes, questionID) VALUES (?, ?, ?, ?);";	
+			String sql = "INSERT INTO Response (responseID, response, numVotes, questionID) VALUES (?, ?, ?, ?);";	
 
 			PreparedStatement PS = connection.prepareStatement(sql);
 			PS.setInt(1, r.getResponseID());
@@ -37,9 +43,9 @@ public class PollDatabaseHandler {
 	}
 	
 	public void savePoll() throws SQLException {
-		String jdbcURL = "jdbc:mysql://localhost:3306/Polling";
-		String dbUser = "root";
-		String dbPassword = "root";
+//		String jdbcURL = "jdbc:mysql://localhost:3306/Polling";
+//		String dbUser = "root";
+//		String dbPassword = "root";
 		
 		Connection connection = DriverManager.getConnection(jdbcURL, dbUser, dbPassword);
 		String sql = "INSERT INTO Poll (id, count, isPublic, question, classCode) VALUES (?, ?, ?, ?, ?);";	
@@ -49,6 +55,11 @@ public class PollDatabaseHandler {
 		PS.setInt(2, 0);
 		PS.setBoolean(3, poll.isPublic());
 		PS.setString(4,  poll.getQuestion());
+		
+		System.out.println("TEST " + poll.getPollID() + " "  
+					+ poll.isPublic() + " " + poll.getQuestion()
+				);
+
 		
 		if (poll.getClassCode().equals(""))
 			PS.setString(5, null);
@@ -67,13 +78,13 @@ public class PollDatabaseHandler {
 	public ArrayList<String> getPollResults(int pollId) throws SQLException{
 		ArrayList<String> output = new ArrayList<String>();
 		
-		String jdbcURL = "jdbc:mysql://localhost:3306/Polling";
-		String dbUser = "root";
-		String dbPassword = "root";
+//		String jdbcURL = "jdbc:mysql://localhost:3306/Polling";
+//		String dbUser = "root";
+//		String dbPassword = "root";
 		
 		Connection connection = DriverManager.getConnection(jdbcURL, dbUser, dbPassword);
-		String sql = "Select response from Responses "
-				+ "Inner join Poll on Poll.id = Responses.questionID "
+		String sql = "Select response from Response "
+				+ "Inner join Poll on Poll.id = Response.questionID "
 				+ "where Poll.id=" + pollId + ";";	
 		PreparedStatement PS = connection.prepareStatement(sql);
 		ResultSet rs = PS.executeQuery();
@@ -90,13 +101,13 @@ public class PollDatabaseHandler {
 	public ArrayList<Integer> getPollResultCount(int pollId) throws SQLException{
 		ArrayList<Integer> output = new ArrayList<Integer>();
 		
-		String jdbcURL = "jdbc:mysql://localhost:3306/Polling";
-		String dbUser = "root";
-		String dbPassword = "root";
+//		String jdbcURL = "jdbc:mysql://localhost:3306/Polling";
+//		String dbUser = "root";
+//		String dbPassword = "root";
 	
 		Connection connection = DriverManager.getConnection(jdbcURL, dbUser, dbPassword);
-		String sql = "Select count from Responses "
-				+ "Inner join Poll on Poll.id = Responses.questionID "
+		String sql = "Select count from Response "
+				+ "Inner join Poll on Poll.id = Response.questionID "
 				+ "where Poll.id=" + pollId + ";";	
 		PreparedStatement PS = connection.prepareStatement(sql);
 		ResultSet rs = PS.executeQuery();
@@ -105,7 +116,7 @@ public class PollDatabaseHandler {
             output.add(rs.getInt(1));
         }
 
-		//this.saveResponses(connection);
+		//this.saveResponse(connection);
 		// PS.executeUpdate();
 		connection.close();
 		
@@ -114,9 +125,9 @@ public class PollDatabaseHandler {
 	}
 	
 	public String getQuestion(int pollId) throws SQLException {		
-		String jdbcURL = "jdbc:mysql://localhost:3306/Polling";
-		String dbUser = "root";
-		String dbPassword = "root";
+//		String jdbcURL = "jdbc:mysql://localhost:3306/Polling";
+//		String dbUser = "root";
+//		String dbPassword = "root";
 		
 		Connection connection = DriverManager.getConnection(jdbcURL, dbUser, dbPassword);
 		String sql = "Select question from Poll Where id=" + pollId + ";";	
@@ -135,9 +146,9 @@ public class PollDatabaseHandler {
 		public ArrayList<Integer> getPollIdList() throws SQLException{
 			ArrayList<Integer> output = new ArrayList<Integer>();
 			
-			String jdbcURL = "jdbc:mysql://localhost:3306/Polling";
-			String dbUser = "root";
-			String dbPassword = "root";
+//			String jdbcURL = "jdbc:mysql://localhost:3306/Polling";
+//			String dbUser = "root";
+//			String dbPassword = "root";
 			
 			Connection connection = DriverManager.getConnection(jdbcURL, dbUser, dbPassword);
 			String sql = "SELECT id FROM Poll Where isPublic=true;";
@@ -160,9 +171,9 @@ public class PollDatabaseHandler {
 	public ArrayList<Integer> getPollIdByClass(int classId) throws SQLException {
 		ArrayList<Integer> output = new ArrayList<Integer>();
 		
-		String jdbcURL = "jdbc:mysql://localhost:3306/Polling";
-		String dbUser = "root";
-		String dbPassword = "root";
+//		String jdbcURL = "jdbc:mysql://localhost:3306/Polling";
+//		String dbUser = "root";
+//		String dbPassword = "root";
 		
 		Connection connection = DriverManager.getConnection(jdbcURL, dbUser, dbPassword);
 		String sql = "Select id from Poll where Poll.classCode=" + classId + ";";	

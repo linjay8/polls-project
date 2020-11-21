@@ -8,7 +8,7 @@ public class Instructor extends User
 //	private ArrayList<Poll> privatePolls;
 	private ZoneId timezone;
 
-	public Instructor(String name_, String email_, String userId_)
+	public Instructor(String name_, String email_, int userId_)
 	{
 		super( name_,  email_,  2,  userId_);
 		if(!DatabaseUtil.userExists(userId_))
@@ -40,7 +40,7 @@ public class Instructor extends User
 	    return classCode;
 	}
 	
-	public void createNewClass(String className)
+	public Class createNewClass(String className)
 	{
 		String classCode;
 		do
@@ -51,6 +51,7 @@ public class Instructor extends User
 		Class c = new Class(this, className, classCode);
 		classes.add(c);
 		DatabaseUtil.addNewClass(c, userId);
+		return c;
 	}
 
 //	public ArrayList<Poll> getPrivatePolls() {

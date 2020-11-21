@@ -9,7 +9,7 @@ public class Student extends User
     private Class inClass; // the class page they are currently on
 
 
-    public Student(String name_, String email_, String userId_)
+    public Student(String name_, String email_, int userId_)
     {
         super(name_,  email_,  1,  userId_);
         if(!DatabaseUtil.userExists(userId_))

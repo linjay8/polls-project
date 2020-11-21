@@ -5,10 +5,10 @@ public class User extends Thread
 	protected String name;
 	protected String email;
 	protected int accountLevel;    // guest = 0,  student = 1,  instructor = 2
-	protected String userId;
+	protected int userId;
 //	protected ArrayList<Poll> publicPolls;
 
-	public User(String name_, String email_, int accountLevel_, String userId_)
+	public User(String name_, String email_, int accountLevel_, int userId_)
 	{
 		name = name_;
 		email = email_;
@@ -21,7 +21,7 @@ public class User extends Thread
 		name = "";
 		email = "";
 		accountLevel = -1;
-		userId = "";
+		userId = -1;
 	}
 
 //	public ArrayList<Poll> getPublicPolls()
@@ -47,7 +47,7 @@ public class User extends Thread
 		return accountLevel;
 	}
 
-	public String getUserId()
+	public int getUserId()
 	{
 		return userId;
 	}

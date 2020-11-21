@@ -4,22 +4,23 @@ CREATE DATABASE FinalProject;
 USE FinalProject;
 
 CREATE TABLE UserInfo (
-	userID VARCHAR(500) NOT NULL PRIMARY KEY,
+	userID INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    logintoken VARCHAR(2000) NOT NULL,
     firstname VARCHAR(200) NOT NULL,
     lastname VARCHAR(200) NOT NULL,	
-    email VARCHAR(200) NOT NULL UNIQUE,
+    email VARCHAR(200) NOT NULL,
     accountlevel INT NOT NULL
 );
             
 CREATE TABLE Class (
 	classcode VARCHAR(6) NOT NULL UNIQUE PRIMARY KEY,
-    classname VARCHAR(200) NOT NULL UNIQUE,
-    instructorID VARCHAR(500) NOT NULL,
+    classname VARCHAR(200) NOT NULL,
+    instructorID INT NOT NULL,
     FOREIGN KEY (instructorID) REFERENCES UserInfo(userID)
 );
 
 CREATE TABLE ClassMember (
-	studentID VARCHAR(500) NOT NULL,
+	studentID INT NOT NULL,
 	classcode VARCHAR(6) NOT NULL,
     FOREIGN KEY (studentID) REFERENCES UserInfo(userID),
     FOREIGN KEY (classcode) REFERENCES Class(classcode)
@@ -29,7 +30,7 @@ CREATE TABLE ClassMember (
 CREATE TABLE Poll (
 	questionID INT NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,
     question VARCHAR(500) NOT NULL,
-    instructorID VARCHAR(500) NOT NULL,
+    instructorID int NOT NULL,
     classcode VARCHAR(6) NOT NULL,
     resultvis INT NOT NULL,
     FOREIGN KEY (instructorID) REFERENCES UserInfo(userID),
@@ -46,7 +47,7 @@ CREATE TABLE Response (
 
 CREATE TABLE UserResponse (
 	studentResponseID INT NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,
-    studentID VARCHAR(500) NOT NULL,
+    studentID INT NOT NULL,
     questionID INT NOT NULL,
     responseID INT NOT NULL,
     FOREIGN KEY (studentID) REFERENCES UserInfo(userID),

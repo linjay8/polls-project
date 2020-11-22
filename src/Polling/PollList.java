@@ -20,6 +20,9 @@ public class PollList extends HttpServlet
 		// Variables to help print results
 		String userId = request.getParameter("userId");
 		int classCode = Integer.parseInt(request.getParameter("classCode"));
+		String email = (String)request.getSession().getAttribute("email"); 
+	
+		
 		PollDatabaseHandler dbHandler = new PollDatabaseHandler();
 		try{
 			String title = "Using GET Method to Read Form Data";
@@ -32,6 +35,9 @@ public class PollList extends HttpServlet
 			// For each poll in class, print answer choice with count
 			// Must verify that student has not answered poll
 			for (int pollId : dbHandler.getPollIdByClass(classCode)) {
+				
+				// If student is NOT in studentList for pollId 
+				
 				ArrayList<String> resultList = dbHandler.getPollResults(pollId);
 				
 				out.print("<div>");
@@ -48,7 +54,8 @@ public class PollList extends HttpServlet
 				// Pass hidden variables to next page
 				out.print("<input type = \"hidden\" name = \"pollId\" id = \"pollId\" value = " + pollId + ">");
 				out.print("<input type = \"hidden\" name = \"classCode\" value = " + classCode+ ">");
-				out.print("<input type = \"hidden\" name = \"userId\" value = " + userId+ ">");
+				out.print("<input type = \"hidden\" name = \"email\" value = " + email+ ">");
+				
 				
 				out.print("<input type = \"submit\" value = \"Answer this poll\" /> ");
 				out.print("</form>");
@@ -59,7 +66,7 @@ public class PollList extends HttpServlet
 			
 			// Might want to use a separate form instead of a button?
 			out.print("<br><br>");
-			out.print("<a href=\"StudentHome.html\">Home</a>");
+			out.print("<a href=\"StudentHome.jsp\">Home</a>");
 	
 			out.println("</body>");
 			out.println("</html>");

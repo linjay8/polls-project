@@ -36,12 +36,19 @@ public class StudentServletStart extends HttpServlet {
 		String classString = request.getParameter("class");
 		String emailString = (String)request.getSession().getAttribute("email");
 		Student s = DatabaseUtil.getStudent(emailString);
-		Class c = DatabaseUtil.getClass(classString);
+		models.Class c = DatabaseUtil.getClass(classString);
 		
 		if (request.getParameter("joinOHButton") != null) {
 			s.joinOH(c);
+			try {
+				Thread.sleep(5000);
+			}catch(InterruptedException e) {
+				
+			}
+			
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextPage);
 			dispatcher.forward(request, response);
+		
 		}
 
 	}

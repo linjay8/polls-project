@@ -21,6 +21,7 @@ public class PublicPollList extends HttpServlet
 //		String studentId = request.getParameter("studentId");
 		PollDatabaseHandler dbHandler = new PollDatabaseHandler();
 		try{
+			
 			String title = "Public Polls";
 			out.println("<html>");
 			out.println("<head><title>" + title + "</title></head>");

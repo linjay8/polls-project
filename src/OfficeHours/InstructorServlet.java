@@ -53,11 +53,19 @@ public class InstructorServlet extends HttpServlet {
 		
 		if (request.getParameter("startOHButton") != null) {
 			Instructor i = DatabaseUtil.getInstructor(emailString);
-			Class c = DatabaseUtil.getClass(classString);
-			i.startOfficeHours(c, Integer.parseInt(meetingLimitString), Double.parseDouble(timeslotString), 
-					linkString, ZoneId.systemDefault(), endTimeString);
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextPage);
-			dispatcher.forward(request, response);
+			models.Class c = DatabaseUtil.getClass(classString);
+			
+			if(i.startOfficeHours(c, Integer.parseInt(meetingLimitString), Double.parseDouble(timeslotString), 
+					linkString, ZoneId.systemDefault(), endTimeString)) {
+				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextPage);
+				dispatcher.forward(request, response);
+			}
+			else {
+				nextPage = "/InstructorStart.jsp";
+				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextPage);
+				dispatcher.forward(request, response);
+			}
+			
 		}
 	
 	}

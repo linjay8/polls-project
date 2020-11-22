@@ -75,7 +75,7 @@ public class Class
 	{
 		oh = new OfficeHours (instructor, meetingLimit, timeSlot, link, timezone, startTime, endTime);
 		oh.initSemaphore();
-		//System.out.println(ZonedDateTime.now(timezone) + "OH OPEN CORRECT");
+		System.out.println(ZonedDateTime.now(timezone) + "OH OPEN CORRECT");
 		Runnable r = oh;
 		Thread t = new Thread(r);
 		t.start();
@@ -85,7 +85,7 @@ public class Class
 	public void stopOH()
 	{
 		oh = null;
-		//System.out.println(ZonedDateTime.now(timezone) + " Instructor has ended OH");
+		System.out.println(ZonedDateTime.now(timezone) + " Instructor has ended OH");
 	}
     
 }

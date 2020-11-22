@@ -30,7 +30,13 @@ public class ClientThread extends Thread
 //				dout.println(name +": " + line);
 //			}
 //			dout.close();
-			Thread.sleep(5000);
+			try {
+				Thread.sleep(5000);
+			}
+			catch(InterruptedException e) {
+				
+			}
+			
 		}
 		catch (IOException ex) {}
 		finally

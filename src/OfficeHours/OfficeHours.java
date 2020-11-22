@@ -31,7 +31,7 @@ public class OfficeHours implements Runnable {
 	private LinkRoom lr;
 	
 	public OfficeHours (Instructor i, int meetingLimit, double timeSlot, String link, ZoneId timezone,
-			String startTime, String endTime)
+			ZonedDateTime startTime, String endTime)
 	{
 		this.i = i;
 		this.meetingLimit = meetingLimit;

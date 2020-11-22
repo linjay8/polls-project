@@ -98,7 +98,7 @@ public class Instructor extends User
 			ZoneId timezone, String endTime)
     {
     	
-    	if (c.getInstructor() == this && currentOH == null)
+    	if ((c.getInstructor().getEmail() == this.getEmail()) && (currentOH == null))
     	{    		
     		//System.out.println(ZonedDateTime.now(timezone) + " Instructor " + getFullName() + " is starting OH");
         	OfficeHours oh = c.startOH(meetingLimit, timeSlot, link, timezone, ZonedDateTime.now(timezone), endTime);

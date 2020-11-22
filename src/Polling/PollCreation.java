@@ -18,13 +18,13 @@ import javax.servlet.annotation.WebServlet;
 @WebServlet("/PollCreation")
 public class PollCreation extends HttpServlet
 {
-	Instructor instructor;
 
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
+		String email = (String)request.getSession().getAttribute("email"); 
 		
 		// Initialize variables
 		String answer1 = "";
@@ -122,7 +122,7 @@ public class PollCreation extends HttpServlet
 				responseList.add(r);	
 			}
 			
-			Poll poll = new Poll(pollId, instructor, classCode,  isPublic, question, responseList, studentList);
+			Poll poll = new Poll(pollId, email, classCode,  isPublic, question, responseList, studentList);
 	        PollDatabaseHandler handler = new PollDatabaseHandler(poll);
 	        try {
 	        	 handler.savePoll();

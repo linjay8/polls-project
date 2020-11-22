@@ -3,6 +3,7 @@
 <!doctype html>
 <html>
 <head>
+	<%@ page import = "models.*" %>
     <meta charset="utf-8">
     <meta name="keywords" content="">
     <meta name="description" content="">
@@ -19,17 +20,20 @@
 	<h1>Instructor Start Office Hours</h1>
 
 
+
 <div class="page-container">
 
 <!-- JSP checking for existing error message -->
+
 <%
+		String email = (String)request.getSession().getAttribute("email");
+
 		String errorMessageClass = (String)request.getAttribute("errorMessageClass");
 		String errorMessageLink = (String)request.getAttribute("errorMessageLink");
 		String classString = "";
 		String meetingLimitString = "";
 		String timeslotString = "";
 		String linkString = "";
-		String startTimeString = "";
 		String endTimeString = "";
 		if (errorMessageClass != null || errorMessageLink != null) {
 			if (errorMessageClass == null)
@@ -44,13 +48,14 @@
 			meetingLimitString = request.getParameter("meetinglimit");
 			timeslotString = request.getParameter("timeslot");
 			linkString = request.getParameter("link");
-			startTimeString = request.getParameter("starttime");
 			endTimeString = request.getParameter("endtime");
 		} else {
 			errorMessageClass = "";
 			errorMessageLink = "";
 		}
 %>
+
+	<h1><%=email %></h1>
 <!-- JSP end -->
 
 <!-- body -->
@@ -83,12 +88,6 @@
 		</label>
 		<input id="link" name="link" value="<%= linkString %>"class="form-control"/>
 		<%= errorMessageLink %>
-	</div>
-	<div class="form-group" id="formstarttime">
-		<label>
-			Start Time (formatted as year:month:day:hour:minute)
-		</label>
-		<input id="starttime" name="starttime" value="<%= startTimeString %>"class="form-control"/>
 	</div>
 	<div class="form-group" id="formendtime">
 		<label>

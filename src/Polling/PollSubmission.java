@@ -18,10 +18,13 @@ public class PollSubmission extends HttpServlet
 	{
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
+
+	
 		
 		// Variables to help print results
 		int classCode = Integer.parseInt(request.getParameter("classCode"));
 		int pId = Integer.parseInt(request.getParameter("pollId"));
+		String email = (String)request.getSession().getAttribute("email"); 
 		
 		PollDatabaseHandler dbHandler = new PollDatabaseHandler();
 		try{
@@ -66,7 +69,7 @@ public class PollSubmission extends HttpServlet
 			
 			// Might want to use a separate form instead of a button?
 			out.print("<br><br>");
-			out.print("<a href=\"StudentHome.html\">Home</a>");
+			out.print("<a href=\"StudentHome.jsp\">Home</a>");
 	
 			out.println("</body>");
 			out.println("</html>");

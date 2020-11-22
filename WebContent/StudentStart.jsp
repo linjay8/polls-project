@@ -3,6 +3,7 @@
 <!doctype html>
 <html>
 <head>
+<%@ page import = "models.*" %>
     <meta charset="utf-8">
     <meta name="keywords" content="">
     <meta name="description" content="">

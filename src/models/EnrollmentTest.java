@@ -1,8 +1,9 @@
 package models;
+
 public class EnrollmentTest {
 	public static void main(String[] args) 
 	{
-//		Instructor i = new Instructor("IJay Lin", "j@gmail.com", "login123");
+//		Instructor i = new Instructor("IJay Lin", "j@gmail.com", 123);
 ////		Instructor i2 = new Instructor("JayDupe Lin", "j", "login123");
 //		Instructor i3 = new Instructor("JayDupe Lin2", "j2", "login1234");
 //		i.createNewClass("CSCI201L");

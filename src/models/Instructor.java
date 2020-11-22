@@ -1,4 +1,6 @@
 package models;
+
+import org.apache.commons.lang3.RandomStringUtils;
 import java.util.ArrayList;
 import java.util.Random;
 import java.time.*;
@@ -12,10 +14,6 @@ public class Instructor extends User
 	public Instructor(String name_, String email_, int userId_)
 	{
 		super( name_,  email_,  2,  userId_);
-		if(!DatabaseUtil.userExists(userId_))
-		{
-			DatabaseUtil.addNewUser(this);
-		}
 		this.timezone = ZoneId.systemDefault();
 		classes = DatabaseUtil.getClassesFromInstructor(this);
 	}
@@ -26,17 +24,7 @@ public class Instructor extends User
 	}
 	public String generateClassCode()
 	{
-		// replace this with apache
-		int leftLimit = 48; // numeral '0'
-	    int rightLimit = 122; // letter 'z'
-	    int targetStringLength = 6;
-	    Random random = new Random();
-	 
-	    String classCode = random.ints(leftLimit, rightLimit + 1)
-	      .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
-	      .limit(targetStringLength)
-	      .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-	      .toString();
+		String classCode = RandomStringUtils.randomAlphanumeric(6);
 	    
 	    return classCode;
 	}

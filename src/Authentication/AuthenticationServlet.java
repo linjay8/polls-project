@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import models.DatabaseUtil;
+
 /**
  * Servlet implementation class DemoServlet
  */
@@ -45,7 +47,16 @@ public class AuthenticationServlet extends HttpServlet {
 		
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextPage);
 		dispatcher.forward(request, response);
-}
+		
+		
+		request.getSession().setAttribute("email", email);
+		// Check duplicates
+		if(!DatabaseUtil.userExists(email)) {
+			DatabaseUtil.addNewUser(firstname + " " + lastname, email, Integer.valueOf(accountlevel));
+		}
+	
+	}
+		
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

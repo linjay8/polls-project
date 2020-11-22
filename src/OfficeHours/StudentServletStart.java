@@ -1,4 +1,5 @@
 package OfficeHours;
+import models.*;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -35,7 +36,7 @@ public class StudentServletStart extends HttpServlet {
 		String classString = request.getParameter("class");
 		String emailString = request.getParameter("email");
 		Student s = DatabaseUtil.getStudent(emailString);
-		Class c = DatabaseUtil.getClass(classString);
+		models.Class c = DatabaseUtil.getClass(classString);
 		
 		if (request.getParameter("joinOHButton") != null) {
 			s.joinOH(c);

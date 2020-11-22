@@ -1,5 +1,5 @@
 package OfficeHours;
-
+import models.*;
 
 
 import java.io.IOException;
@@ -34,11 +34,11 @@ public class InstructorServletResults extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String nextPage = "/InstructorStart.jsp";
 	
-		String idTokenString = request.getParameter("id_token");
+		String email = request.getParameter("email");
 		String classString = request.getParameter("class");
 		
-		Instructor i = DatabaseUtil.getInstructor(idTokenString);
-		Class c = DatabaseUtil.getClass(classString);
+		Instructor i = DatabaseUtil.getInstructor(email);
+		models.Class c = DatabaseUtil.getClass(classString);
 		
 		
 		

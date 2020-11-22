@@ -1,5 +1,5 @@
 package OfficeHours;
-
+import models.*;
 
 
 import java.io.IOException;
@@ -37,7 +37,7 @@ public class StudentServletResults extends HttpServlet {
 		String classString = request.getParameter("class");
 		String emailString = request.getParameter("email");
 		Student s = DatabaseUtil.getStudent(emailString);
-		Class c = DatabaseUtil.getClass(classString);
+		models.Class c = DatabaseUtil.getClass(classString);
 		
 		if (request.getParameter("leaveOHButton") != null) {
 			s.joinOH(c);

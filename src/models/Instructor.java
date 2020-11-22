@@ -1,4 +1,5 @@
 package models;
+import OfficeHours.*;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import java.util.ArrayList;

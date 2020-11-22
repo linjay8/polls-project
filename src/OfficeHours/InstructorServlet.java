@@ -1,5 +1,5 @@
 package OfficeHours;
-
+import models.*;
 
 
 import java.io.IOException;
@@ -40,7 +40,8 @@ public class InstructorServlet extends HttpServlet {
 		String linkString = request.getParameter("link");
 		String startTimeString = request.getParameter("starttime");
 		String endTimeString = request.getParameter("endtime");
-		String idTokenString = request.getParameter("id_token");
+		String email = request.getParameter("email");
+		
 		
 		if (classString == null || classString.isEmpty())
 		{
@@ -55,8 +56,8 @@ public class InstructorServlet extends HttpServlet {
 		}
 		
 		if (request.getParameter("startOHButton") != null) {
-			Instructor i = DatabaseUtil.getInstructor(idTokenString);
-			Class c = DatabaseUtil.getClass(classString);
+			Instructor i = DatabaseUtil.getInstructor(email);
+			models.Class c = DatabaseUtil.getClass(classString);
 			i.startOfficeHours(c, Integer.parseInt(meetingLimitString), Double.parseDouble(timeslotString), 
 					linkString, ZoneId.systemDefault(), startTimeString, endTimeString);
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextPage);

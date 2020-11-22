@@ -1,4 +1,5 @@
 package models;
+import OfficeHours.*;
 
 import java.util.ArrayList;
 import java.time.*;
@@ -70,15 +71,15 @@ public class Student extends User
     }
     
     // enter a class page
-    public Boolean enterClass (Class c)
-    {
-    	if (classes.contains(c))
-    	{
-    		inClass = c;
-        	return true;
-    	}
-    	return false;
-    }
+//    public Boolean enterClass (Class c)
+//    {
+//    	if (classes.contains(c))
+//    	{
+//    		ohClass = c;
+//        	return true;
+//    	}
+//    	return false;
+//    }
     
 	public Boolean joinOH (Class c)
     {

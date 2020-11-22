@@ -7,6 +7,7 @@
 	<link rel="stylesheet" type="text/css" href="style.css" />
 
 <title>Office Hours Started!</title>
+<%@ page import="models.*" %>
 </head>
 <body>
 		

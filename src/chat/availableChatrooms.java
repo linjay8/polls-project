@@ -30,25 +30,27 @@ public class availableChatrooms extends HttpServlet {
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
-
-		// recipient = request.getParameter("recipient").toString(); // Extract username
-		// senderId = session.getAttribute("userId").toString();
+		
 		//need to get senderId from requestdispatcher? or a button that sends value to this servlet (URl query get)
-		senderId = 1;
+		//senderId = DatabaseUtil.getUserId(request.getParameter("email")); //get senderId from email
+		 senderId = 1;
+		 //request.setAttribute("senderID", 1);
+		 
+		 
 		PrintWriter out = response.getWriter();
 
 		try {
-			Student s2 = DatabaseUtil.getStudent(senderId);
-			Instructor i2 = null;
+			// ArrayList<String> list = chatDB.getAvailableStudents("a", out);
+			Student st2 = DatabaseUtil.getStudentFromId(senderId);
+			Instructor in2 = null;
 			ArrayList<Class> classes = null;
 			boolean isInstructor = false;
-			
-			if (s2 != null) {
-				classes = DatabaseUtil.getClassesFromStudent(s2);
+			if (st2 != null) {
+				classes = DatabaseUtil.getClassesFromStudent(st2);
 			} else {
 				isInstructor = true;
-				i2 = DatabaseUtil.getInstructor(senderId);
-				classes = DatabaseUtil.getClassesFromInstructor(i2);
+				in2 = DatabaseUtil.getInstructorFromId(senderId);
+				classes = DatabaseUtil.getClassesFromInstructor(in2);
 			}
 
 			// display available chatrooms
@@ -79,11 +81,6 @@ public class availableChatrooms extends HttpServlet {
 			out.println("</body>");
 			out.println("</html>");
 
-			// session = request.getSession();
-			// session.setAttribute("recipientId", r);
-			// session.setAttribute("recipientId", request.getParameter("recipient")); //
-			// Set Attribute
-
 		} catch (Exception e) {
 			out.println("<!DOCTYPE html>");
 			out.println("<html>");
@@ -96,11 +93,12 @@ public class availableChatrooms extends HttpServlet {
 			out.println("</html>");
 			System.out.println(e);
 		} finally {
-			// request.setAttribute("recipientId",
+			//do i still need to send senderId to the next page?
+			 //request.setAttribute("senderId", senderId);
 			// request.getParameter("recipient").toString());
-			// RequestDispatcher dispatcher =
-			// getServletContext().getRequestDispatcher("/chatWindow");
-			// dispatcher.forward(request, response);
+			
+			//RequestDispatcher dispatcher = request.getRequestDispatcher("/chatWindow");
+			//dispatcher.forward(request, response);
 			// request.getRequestDispatcher("/chatWindow").include(request, response);
 		}
 
@@ -117,11 +115,6 @@ public class availableChatrooms extends HttpServlet {
 			throws ServletException, IOException {
 		processRequest(request, response);
 	}
-
-	@Override
-	public String getServletInfo() {
-		return "Short description";
-	}// </editor-fold>
-
+	
 	HttpSession session;
 }

@@ -82,14 +82,14 @@ public class chatDB {
 	}
 
 	public static ArrayList<Integer> getAvailableStudents(int senderId) {
-		Student s1 = DatabaseUtil.getStudent(senderId);
+		Student s1 = DatabaseUtil.getStudentFromId(senderId);
 		Instructor i1 = null;
 		ArrayList<Class> classes = new ArrayList<Class>();
 		ArrayList<Integer> recipients = new ArrayList<Integer>();
 		boolean isStudent = true;
 		if (s1 == null) {
 			isStudent = false;
-			i1 = DatabaseUtil.getInstructor(senderId);
+			i1 = DatabaseUtil.getInstructorFromId(senderId);
 			if (i1 == null) {
 				return null;
 			}
@@ -117,10 +117,10 @@ public class chatDB {
 
 	public static String getNameFromId(int senderId) {
 		String name = "";
-		Student s1 = DatabaseUtil.getStudent(senderId);
+		Student s1 = DatabaseUtil.getStudentFromId(senderId);
 		Instructor i1 = null;
 		if (s1 == null) {
-			i1 = DatabaseUtil.getInstructor(senderId);
+			i1 = DatabaseUtil.getInstructorFromId(senderId);
 			name = i1.getFullName();
 		} else {
 			name = s1.getFullName();

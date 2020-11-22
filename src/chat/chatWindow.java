@@ -35,10 +35,13 @@ public class chatWindow extends HttpServlet {
 			
 			String message = request.getParameter("txtMsg"); // Extract Message
 			// session = request.getSession();
-			// session.setAttribute("recipientId", request.getParameter("recipient")); //
+			// session.setAttribute("recipientId", request.getParameter("recipient")); 
+			// senderId = session.getAttribute("userId").toString();
 			// Set Attribute
 			int recipientId;
 			senderId = 1;
+			//senderId = (int)request.getAttribute("senderId");
+			
 			if (request.getParameter("recipient") != null) {
 				recipientId = Integer.parseInt(request.getParameter("recipient"));
 				recipientIdFinal = recipientId;
@@ -56,8 +59,6 @@ public class chatWindow extends HttpServlet {
 				out.println("</html>");
 			} else {
 				recipientName = chatDB.getNameFromId(recipientIdFinal);
-				// senderId = session.getAttribute("userId").toString();
-
 				// Display Chat Room
 				out.println(
 						"<html>  <head> <body bgcolor=\"#FFFFFF\"> <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"> <title>Chat Room</title>  </head>");
@@ -116,11 +117,6 @@ public class chatWindow extends HttpServlet {
 			throws ServletException, IOException {
 		processRequest(request, response);
 	}
-
-	@Override
-	public String getServletInfo() {
-		return "Short description";
-	}// </editor-fold>
 
 	HttpSession session;
 }

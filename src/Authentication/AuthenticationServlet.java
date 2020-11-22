@@ -31,7 +31,8 @@ public class AuthenticationServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
-		String nextPage = "/signedin.jsp";
+		String nextPageInstructor = "/InstructorHome.html";
+		String nextPageStudent = "/StudentHome.html";
 
 		String id_token = request.getParameter("id_token");
 		// response.getWriter().append("Served at: ").append(request.getContextPath()).append(" \nid_token = ").append(id_token);
@@ -44,8 +45,15 @@ public class AuthenticationServlet extends HttpServlet {
 		response.getWriter().append("\nlast name = ").append(lastname);
 		String email = request.getParameter("email");
 		response.getWriter().append("\nemail = ").append(email);
-		
-		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextPage);
+		RequestDispatcher dispatcher = null;
+		if(Integer.valueOf(accountlevel) == 1)
+		{
+			dispatcher = getServletContext().getRequestDispatcher(nextPageStudent);
+		}
+		else if(Integer.valueOf(accountlevel) == 2)
+		{
+			dispatcher = getServletContext().getRequestDispatcher(nextPageInstructor);
+		}
 		dispatcher.forward(request, response);
 		
 		

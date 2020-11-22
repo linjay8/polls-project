@@ -27,16 +27,11 @@ public class availableChatrooms extends HttpServlet {
 	public int senderId;
 	public String recipientId;
 
-	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+	protected void processRequest(HttpServletRequest request, HttpServletResponse response, String senderID)
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
-		
-		//need to get senderId from requestdispatcher? or a button that sends value to this servlet (URl query get)
-		//senderId = DatabaseUtil.getUserId(request.getParameter("email")); //get senderId from email
-		 senderId = 1;
-		 //request.setAttribute("senderID", 1);
-		 
-		 
+	
+		senderId =  DatabaseUtil.getUserId(senderID);
 		PrintWriter out = response.getWriter();
 
 		try {
@@ -77,6 +72,7 @@ public class availableChatrooms extends HttpServlet {
 				}
 
 			}
+			
 			out.println("</form>");
 			out.println("</body>");
 			out.println("</html>");
@@ -92,28 +88,22 @@ public class availableChatrooms extends HttpServlet {
 			out.println("</body>");
 			out.println("</html>");
 			System.out.println(e);
-		} finally {
-			//do i still need to send senderId to the next page?
-			 //request.setAttribute("senderId", senderId);
-			// request.getParameter("recipient").toString());
-			
-			//RequestDispatcher dispatcher = request.getRequestDispatcher("/chatWindow");
-			//dispatcher.forward(request, response);
-			// request.getRequestDispatcher("/chatWindow").include(request, response);
-		}
+		} 
 
 	}
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		processRequest(request, response);
+		String temp = (String)request.getSession().getAttribute("email");
+		processRequest(request, response, temp);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		processRequest(request, response);
+		String temp = (String)request.getSession().getAttribute("email");
+		processRequest(request, response, temp);
 	}
 	
 	HttpSession session;

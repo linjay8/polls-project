@@ -1,5 +1,6 @@
 package OfficeHours;
 
+import models.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -15,7 +16,7 @@ public class LinkRoom {
 	{
 		try
 		{
-			System.out.println("Binding to port " + port);
+			//System.out.println("Binding to port " + port);
 			ServerSocket ss = new ServerSocket(port);
 			serverThreads = new Vector<ServerThread>();
 			while(true) // while OH is open
@@ -24,7 +25,7 @@ public class LinkRoom {
 				System.out.println("Connection from " + s + " at " + new Date());
 				// each ClientThread creates a ServerThread which serves this connection
 				ServerThread st = new ServerThread(s, this);
-				System.out.println("Inviting this student to meeting...");
+				//System.out.println("Inviting this student to meeting...");
 				serverThreads.add(st);
 			}
 		}
@@ -34,16 +35,16 @@ public class LinkRoom {
 
 	public void sendLink()
 	{
-		System.out.println("Sending link ..." + link);
+		//System.out.println("Sending link ..." + link);
 		ServerThread newThread = serverThreads.lastElement();
 		newThread.sendMessage(link);
 	}
 	
-	public void sendMessage(String message)
-	{
-		ServerThread newThread = serverThreads.lastElement();
-		newThread.sendMessage(message);
-	}
+//	public void sendMessage(String message)
+//	{
+//		ServerThread newThread = serverThreads.lastElement();
+//		newThread.sendMessage(message);
+//	}
 }
 
 

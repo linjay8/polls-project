@@ -12,7 +12,7 @@ public class Student extends User
     private Boolean inMeeting;
     private Boolean inWaiting;
     private Class ohClass;
-
+    private String ohLink;
 
     public Student(String name_, String email_, int userId_)
     {
@@ -21,6 +21,7 @@ public class Student extends User
         inMeeting = false;
         inWaiting = false;
         ohClass = null;
+        ohLink = "";
     }
 
     public ArrayList<Class> getClasses() 
@@ -46,6 +47,16 @@ public class Student extends User
     public void setInWaitingStatus(Boolean newWaiting)
     {
     	inWaiting = newWaiting;
+    }
+    
+    public void getClientLink (String link)
+    {
+    	ohLink = link;
+    }
+    
+    public String getOHLink()
+    {
+    	return ohLink;
     }
 
 //    public ArrayList<Poll> getPrivatePolls(String classCode) 
@@ -106,11 +117,6 @@ public class Student extends User
 	public void finishingTurn() {
 		System.out.println (ZonedDateTime.now(ohClass.getTimezone()) + " Student " + getFullName() + " is ending turn in meeting.");
 	}
-    
-    public void leaveMeeting(Class c)
-    {
-    	c.getOH().removeStudentFromMeeting(this);
-    }
     
     public void leaveWaitingList(Class c)
     {

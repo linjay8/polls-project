@@ -34,9 +34,9 @@ public class StudentServletStart extends HttpServlet {
 		String nextPage = "/StudentResults.jsp";
 	
 		String classString = request.getParameter("class");
-		String emailString = request.getParameter("email");
+		String emailString = (String)request.getSession().getAttribute("email");
 		Student s = DatabaseUtil.getStudent(emailString);
-		models.Class c = DatabaseUtil.getClass(classString);
+		Class c = DatabaseUtil.getClass(classString);
 		
 		if (request.getParameter("joinOHButton") != null) {
 			s.joinOH(c);

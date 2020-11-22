@@ -34,11 +34,11 @@ public class InstructorServletResults extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String nextPage = "/InstructorStart.jsp";
 	
-		String email = request.getParameter("email");
+		String emailString = (String)request.getSession().getAttribute("email");
 		String classString = request.getParameter("class");
 		
-		Instructor i = DatabaseUtil.getInstructor(email);
-		models.Class c = DatabaseUtil.getClass(classString);
+		Instructor i = DatabaseUtil.getInstructor(emailString);
+		Class c = DatabaseUtil.getClass(classString);
 		
 		
 		

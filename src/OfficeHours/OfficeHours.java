@@ -46,10 +46,7 @@ public class OfficeHours implements Runnable {
 		this.timezone = timezone;
 		// break up input by colons and trim extra whitespace
 		// string input format = year:month:dayOfMonth:hour:minute
-		String[] startVals = startTime.split(":");
-		this.startTime = ZonedDateTime.of(Integer.parseInt(startVals[0]), Integer.parseInt(startVals[1]),
-				Integer.parseInt(startVals[2]), Integer.parseInt(startVals[3]), Integer.parseInt(startVals[4]),
-				0, 0, timezone);
+		this.startTime = startTime;
 		String[] endVals = endTime.split(":");
 		this.endTime = ZonedDateTime.of(Integer.parseInt(endVals[0]), Integer.parseInt(endVals[1]),
 				Integer.parseInt(endVals[2]), Integer.parseInt(endVals[3]), Integer.parseInt(endVals[4]),
@@ -140,10 +137,16 @@ public class OfficeHours implements Runnable {
 		inMeeting.add(student);
 		meetingSize++;
 		
-		System.out.println ("Transferring student " + student.getFullName() + " from waitlist to meeting");
+		//System.out.println ("Transferring student " + student.getFullName() + " from waitlist to meeting");
 		
 		ClientThread ct = new ClientThread(student, "localhost", 6789);
 		ct.start();
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e2) {}
+		
+		ct.getLink();
+
 		
 		// student has 1 min to join and then their time slot starts
 		try {

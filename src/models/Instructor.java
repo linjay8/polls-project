@@ -95,12 +95,13 @@ public class Instructor extends User
     }
 
     public Boolean startOfficeHours(Class c, int meetingLimit, double timeSlot, String link,
-			ZoneId timezone, String startTime, String endTime)
+			ZoneId timezone, String endTime)
     {
+    	
     	if (c.getInstructor() == this && currentOH == null)
     	{    		
-    		System.out.println(ZonedDateTime.now(timezone) + " Instructor " + getFullName() + " is starting OH");
-        	OfficeHours oh = c.startOH(meetingLimit, timeSlot, link, timezone, startTime, endTime);
+    		//System.out.println(ZonedDateTime.now(timezone) + " Instructor " + getFullName() + " is starting OH");
+        	OfficeHours oh = c.startOH(meetingLimit, timeSlot, link, timezone, ZonedDateTime.now(timezone), endTime);
         	currentOH = oh;
         	return true;
     	}

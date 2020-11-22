@@ -35,12 +35,12 @@ public class StudentServletResults extends HttpServlet {
 		String nextPage = "/StudentStart.jsp";
 	
 		String classString = request.getParameter("class");
-		String emailString = request.getParameter("email");
+		String emailString = (String)request.getSession().getAttribute("email");
 		Student s = DatabaseUtil.getStudent(emailString);
-		models.Class c = DatabaseUtil.getClass(classString);
+		Class c = DatabaseUtil.getClass(classString);
 		
 		if (request.getParameter("leaveOHButton") != null) {
-			s.joinOH(c);
+			s.leaveWaitingList(c);
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextPage);
 			dispatcher.forward(request, response);
 		}
@@ -59,6 +59,11 @@ public class StudentServletResults extends HttpServlet {
 			out.println("<h3>You are now invited to join the meeting...</h3>");
 			request.getRequestDispatcher("StudentResults.jsp").include(request, response);
 		}
+		if (!s.getOHLink().equals(""))
+		{
+			out.println("<h2>"+s.getOHLink()+"</h2>");
+			request.getRequestDispatcher("StudentResults.jsp").include(request, response);
+		}
 		if (!s.getInWaitingStatus() && !s.getInMeetingStatus())
 		{
 			out.println("<h3>Turn in meeting over... exiting...</h3>");
@@ -73,5 +78,4 @@ public class StudentServletResults extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-
 }

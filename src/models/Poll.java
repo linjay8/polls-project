@@ -7,7 +7,7 @@ import java.util.Random;
 public class Poll {
     private int pollID;
     private int voterCount = 0 ;
-    private Instructor creator;
+    private String instructorEmail;
     private String classCode;
     private Boolean isPublic;
     private ArrayList<Response> options;   // List of possible answers (a, b, c, d)
@@ -21,10 +21,10 @@ public class Poll {
 
 
 
-    public Poll(int _pollID, Instructor _creator, String _classCode, Boolean _isPublic, String _question,
+    public Poll(int _pollID, String _instructorEmail, String _classCode, Boolean _isPublic, String _question,
                 ArrayList<Response> _options, ArrayList<Student> _studentList){
        pollID = _pollID;
-       creator = _creator;
+       instructorEmail = _instructorEmail;
        classCode = _classCode;
        isPublic = _isPublic;
        question = _question;
@@ -50,8 +50,8 @@ public class Poll {
         return pollID;
     }
 
-    public Instructor getCreator() {
-        return creator;
+    public String getEmail() {
+    	return instructorEmail;
     }
 
     public void addVote(Response r, Student s){

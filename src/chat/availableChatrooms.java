@@ -31,13 +31,7 @@ public class availableChatrooms extends HttpServlet {
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 	
-		//senderId = DatabaseUtil.getUserId(request.getSession().getAttribute("email")); //get senderId from email
-		//request.getSession().setAttribute("senderId", senderId);
-		//String temp = (String)request.getSession().getAttribute("email");
 		senderId =  DatabaseUtil.getUserId(senderID);
-		//request.setAttribute("senderID", 1);
-		 
-		//request.getSession().setAttribute("senderId", senderId);
 		PrintWriter out = response.getWriter();
 
 		try {

@@ -33,26 +33,10 @@ public class chatWindow extends HttpServlet {
 			
 			
 			String message = request.getParameter("txtMsg"); // Extract Message
-			// session = request.getSession();
-			// session.setAttribute("recipientId", request.getParameter("recipient")); 
-			// senderId = session.getAttribute("userId").toString();
-			// Set Attribute
-			//int recipientIdFinal = Integer.parseInt(recipientID);
-			//int recipientIdFinal = Integer.parseInt(request.getParameter("recipient"));
-			//senderId = 1;
+		
 			senderId = DatabaseUtil.getUserId(senderID);
-			//String recipientIdFinal = session.getAttribute("recipient").toString();
 			int recipientIdFinal = Integer.parseInt(recipientID);
 			
-			/*
-			if (request.getParameter("recipient") != null) {
-				recipientIdFinal = Integer.parseInt(request.getParameter("recipient"));
-				//recipientIdFinal = recipientId;
-				verified = chatDB.verifyChat(senderId, recipientIdFinal);
-			} else {
-				recipientIdFinal = Integer.parseInt(recipientID);
-			}
-			*/
 			if (!chatDB.verifyChat(senderId, recipientIdFinal)) {
 				out.println("<!DOCTYPE html>");
 				out.println("<html>");

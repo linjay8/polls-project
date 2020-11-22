@@ -15,6 +15,9 @@ import models.Class;
 import models.DatabaseUtil;
 import models.Instructor;
 import models.Student;
+/*
+ * THIS ONLY WORKS ON COMPLETELY EMPTY DATABASE
+ */
 
 @TestMethodOrder(OrderAnnotation.class)
 class JUnitChat {

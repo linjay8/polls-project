@@ -310,4 +310,44 @@ public class DatabaseUtil {
 		}
 		return classes;
 	}
+	public static Instructor getInstructorFromId(int userId)
+	{
+		String sql = "SELECT i.* FROM UserInfo i WHERE i.userID = ? AND i.accountlevel = 2";
+		Instructor i = null;
+		try(Connection conn = DriverManager.getConnection(db, user, pwd);
+				PreparedStatement ps = conn.prepareStatement(sql);)
+		{
+			ps.setInt(1, userId);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next())
+			{
+				String name = rs.getString("firstname") + " " + rs.getString("lastname");
+				String email = rs.getString("email");
+				int id = rs.getInt("userID");
+				i = new Instructor(name, email, id);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return i;
+	}
+	
+	public static int getUserId(String email)
+	{
+		String sql = "SELECT i.* FROM UserInfo i WHERE i.email = ?";
+		int id = -1;
+		try(Connection conn = DriverManager.getConnection(db, user, pwd);
+				PreparedStatement ps = conn.prepareStatement(sql);)
+		{
+			ps.setString(1, email);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next())
+			{
+				id = rs.getInt("userID");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return id;
+	}
 }

@@ -1,5 +1,7 @@
 package OfficeHours;
 
+
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.ZoneId;
@@ -32,14 +34,16 @@ public class InstructorServletResults extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String nextPage = "/InstructorStart.jsp";
 	
-		//String idTokenString = request.getParameter("id_token");
-		//String classString = request.getParameter("class");
+		String idTokenString = request.getParameter("id_token");
+		String classString = request.getParameter("class");
 		
-		//Instructor i = DatabaseUtil.getInstructor(idTokenString);
-		//Class c = DatabaseUtil.getClass(classString);
+		Instructor i = DatabaseUtil.getInstructor(idTokenString);
+		Class c = DatabaseUtil.getClass(classString);
+		
+		
 		
 		if (request.getParameter("endOHButton") != null) {
-		//	i.endOH(c);
+			i.endOfficeHours(c);
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextPage);
 			dispatcher.forward(request, response);
 		}

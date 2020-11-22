@@ -11,6 +11,11 @@
 <body>
 		
 <h1>Student has joined Office Hours</h1>
+<% 
+String emailString = request.getParameter("email");
+Student s = DatabaseUtil.getStudent(emailString);
+response.setIntHeader("Refresh", (int)(s.getOHClass().getOH().getTimeSlot())/2); 
+%>
 		
 	<div class="bloc l-bloc none " id="demobody">
 	<div class="container bloc-md">

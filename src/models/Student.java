@@ -8,19 +8,43 @@ import java.util.*;
 public class Student extends User 
 {
     private ArrayList<Class> classes;
-    private Class inClass; // the class page they are currently on
+    private Boolean inMeeting;
+    private Boolean inWaiting;
+    private Class ohClass;
 
 
     public Student(String name_, String email_, int userId_)
     {
         super(name_,  email_,  1,  userId_);
         this.classes = DatabaseUtil.getClassesFromStudent(this);   
-        inClass = null;
+        inMeeting = false;
+        inWaiting = false;
+        ohClass = null;
     }
 
     public ArrayList<Class> getClasses() 
     {
         return classes;
+    }
+    
+    public Class getOHClass()
+    {
+    	return ohClass;
+    }
+    
+    public Boolean getInMeetingStatus()
+    {
+    	return inMeeting;
+    }
+    
+    public Boolean getInWaitingStatus()
+    {
+    	return inWaiting;
+    }
+    
+    public void setInWaitingStatus(Boolean newWaiting)
+    {
+    	inWaiting = newWaiting;
     }
 
 //    public ArrayList<Poll> getPrivatePolls(String classCode) 
@@ -56,56 +80,60 @@ public class Student extends User
     	return false;
     }
     
-//    public Boolean joinOH (Class c)
-//    {
-//    	if (classes.contains(c) && c.getOH() != null)
-//    	{
-//    		// check time constraint
-//    		if (ZonedDateTime.now(c.getTimezone()).isBefore(c.getOH().getStartTime())
-//    				|| ZonedDateTime.now(c.getTimezone()).isAfter(c.getOH().getEndTime()))
-//    		{
-//    			return false;
-//    		}
-//    		inClass.getOH().addStudentToWaiting(this);
-//			
-//    		return true;
-//    	}
-//    	return false;
-//    }
-//    
-//    public void startingTurn() {
-//		System.out.println (ZonedDateTime.now(inClass.getTimezone()) + " Student " + getFullName() + " is starting turn in meeting.");
-//
-//	}
-//
-//	public void finishingTurn() {
-//		System.out.println (ZonedDateTime.now(inClass.getTimezone()) + " Student " + getFullName() + " is ending turn in meeting.");
-//	}
-//    
-//    public void leaveMeeting(Class c)
-//    {
-//    	c.getOH().removeStudentFromMeeting(this);
-//    }
-//    
-//    public void leaveWaitingList(Class c)
-//    {
-//    	c.getOH().removeStudentFromWaiting(this);
-//    }
-//    
-//	@Override
-//	public void run()
-//	{
-//		try
-//		{
-//			startingTurn();
-//			Thread.sleep((long)(inClass.getOH().getTimeSlot() * 60000));
-//		}
-//		catch (InterruptedException ie) {}
-//		finally
-//		{
-//			// finish delivery
-//			finishingTurn();
-//			inClass.getOH().removeStudentFromMeeting(this);
-//		}
-//	}
+	public Boolean joinOH (Class c)
+    {
+    	if (classes.contains(c) && c.getOH() != null && ohClass == null)
+    	{
+    		// check time constraint
+    		if (ZonedDateTime.now(c.getTimezone()).isBefore(c.getOH().getStartTime())
+    				|| ZonedDateTime.now(c.getTimezone()).isAfter(c.getOH().getEndTime()))
+    		{
+    			return false;
+    		}
+    		ohClass = c;
+    		c.getOH().addStudentToWaiting(this);
+    		return true;
+    	}
+    	return false;
+    }
+    
+    public void startingTurn() {
+		System.out.println (ZonedDateTime.now(ohClass.getTimezone()) + " Student " + getFullName() + " is starting turn in meeting.");
+
+	}
+
+	public void finishingTurn() {
+		System.out.println (ZonedDateTime.now(ohClass.getTimezone()) + " Student " + getFullName() + " is ending turn in meeting.");
+	}
+    
+    public void leaveMeeting(Class c)
+    {
+    	c.getOH().removeStudentFromMeeting(this);
+    }
+    
+    public void leaveWaitingList(Class c)
+    {
+    	c.getOH().removeStudentFromWaiting(this);
+    }
+    
+	@Override
+	public void run()
+	{
+		inWaiting = false;
+		inMeeting = true;
+		try
+		{
+			startingTurn();
+			Thread.sleep((long)(ohClass.getOH().getTimeSlot() * 60000));
+		}
+		catch (InterruptedException ie) {}
+		finally
+		{
+			// finish delivery
+			finishingTurn();
+			ohClass.getOH().removeStudentFromMeeting(this);
+			ohClass = null;
+		}
+		inMeeting = false;
+	}
 }

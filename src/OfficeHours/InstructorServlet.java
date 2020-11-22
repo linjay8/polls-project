@@ -1,5 +1,7 @@
 package OfficeHours;
 
+
+
 import java.io.IOException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -53,10 +55,10 @@ public class InstructorServlet extends HttpServlet {
 		}
 		
 		if (request.getParameter("startOHButton") != null) {
-			//Instructor i = DatabaseUtil.getInstructor(idTokenString);
-			//Class c = DatabaseUtil.getClass(classString);
-			//i.startOfficeHours(c, Integer.parseInt(meetingLimitString), Double.parseDouble(timeslotString), 
-			//		linkString, ZoneId.systemDefault(), startTimeString, endTimeString);
+			Instructor i = DatabaseUtil.getInstructor(idTokenString);
+			Class c = DatabaseUtil.getClass(classString);
+			i.startOfficeHours(c, Integer.parseInt(meetingLimitString), Double.parseDouble(timeslotString), 
+					linkString, ZoneId.systemDefault(), startTimeString, endTimeString);
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextPage);
 			dispatcher.forward(request, response);
 		}

@@ -1,6 +1,5 @@
 package OfficeHours;
 
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.ZoneId;
@@ -33,13 +32,13 @@ public class StudentServletStart extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String nextPage = "/StudentResults.jsp";
 	
-		//String idTokenString = request.getParameter("id_token");
-		
-		//Student s = DatabaseUtil.getStudent(idTokenString);
-		//Class c = s.getInClass();
+		String classString = request.getParameter("class");
+		String emailString = request.getParameter("email");
+		Student s = DatabaseUtil.getStudent(emailString);
+		Class c = DatabaseUtil.getClass(classString);
 		
 		if (request.getParameter("joinOHButton") != null) {
-		//	s.joinOH(c);
+			s.joinOH(c);
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextPage);
 			dispatcher.forward(request, response);
 		}

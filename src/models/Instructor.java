@@ -10,12 +10,15 @@ public class Instructor extends User
 	private ArrayList<Class> classes;
 //	private ArrayList<Poll> privatePolls;
 	private ZoneId timezone;
+	private OfficeHours currentOH;
+
 
 	public Instructor(String name_, String email_, int userId_)
 	{
 		super( name_,  email_,  2,  userId_);
 		this.timezone = ZoneId.systemDefault();
 		classes = DatabaseUtil.getClassesFromInstructor(this);
+		currentOH = null;
 	}
 
 	public ArrayList<Class> getClasses() 
@@ -80,29 +83,36 @@ public class Instructor extends User
 //		return privatePolls;
 //	}
 //
-//	public ZoneId getTimezone()
-//    {
-//    	return timezone;
-//    }
-//
-//    public Boolean startOfficeHours(Class c, int meetingLimit, double timeSlot, String link,
-//			ZoneId timezone, String startTime, String endTime)
-//    {
-//    	if (c.getInstructor() == this)
-//    	{    		
-//    		System.out.println(ZonedDateTime.now(timezone) + " Instructor " + getFullName() + " is starting OH");
-//        	c.startOH(meetingLimit, timeSlot, link, timezone, startTime, endTime);
-//        	return true;
-//    	}
-//    	return false;
-//    }
-//    
-//    public void endOfficeHours(Class c)
-//    {
-//    	if (c.getOH() != null)
-//    	{
-//    		c.stopOH();
-//    	}
-//    }
+	public ZoneId getTimezone()
+    {
+    	return timezone;
+    }
+
+	public OfficeHours getCurrentOH ()
+    {
+    	return currentOH;
+    }
+
+    public Boolean startOfficeHours(Class c, int meetingLimit, double timeSlot, String link,
+			ZoneId timezone, String startTime, String endTime)
+    {
+    	if (c.getInstructor() == this && currentOH == null)
+    	{    		
+    		System.out.println(ZonedDateTime.now(timezone) + " Instructor " + getFullName() + " is starting OH");
+        	OfficeHours oh = c.startOH(meetingLimit, timeSlot, link, timezone, startTime, endTime);
+        	currentOH = oh;
+        	return true;
+    	}
+    	return false;
+    }
+    
+    public void endOfficeHours(Class c)
+    {
+    	if (c.getOH() != null)
+    	{
+    		c.stopOH();
+    		currentOH = null;
+    	}
+    }
 
 }

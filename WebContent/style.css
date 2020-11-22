@@ -41,3 +41,13 @@ textarea {
   font-weight:700;
 }
 [type="submit"]:hover { background:#CC4949; }
+
+#gallery-text-left{
+float:left;
+width:50%
+}
+
+#gallery-text-right{
+float:right;
+width:50%
+}

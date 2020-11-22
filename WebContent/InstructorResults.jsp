@@ -11,6 +11,41 @@
 <body>
 	<h1>Instructor Office Hours Started</h1>
 	
+	<div id="gallery-text">
+
+    	<div id="gallery-text-left">
+    	<p id="gallery-paragraph-1">
+		<!-- print students in meeting -->
+    	<% 
+    	String emailString = request.getParameter("email");
+		Instructor i = DatabaseUtil.getInstructor(emailString);
+		
+		response.setIntHeader("Refresh", (int)i.getCurrentOH().getTimeSlot());
+    	
+    	for (Student s : i.getCurrentOH().getStudentsInMeeting()) 
+    	{
+    		out.println(s.getFullName()); %>
+    		<br/>
+    	<%}%>
+    	</p>
+    </div>
+   	<div id="gallery-text">
+
+    	<div id="gallery-text-left">
+    	<p id="gallery-paragraph-1">
+    	<!-- print students in wait list -->
+    	<%
+    	int count = 0;
+    	for (Student s : i.getCurrentOH().getWaitingStudents()) 
+    	{
+    		out.println(count + ": " + s.getFullName()); %>
+    		count++;
+    		<br/>
+    	<%}%>
+    	</p>
+    </div>
+</div>
+	
 	<div class="bloc l-bloc none " id="demobody">
 	<div class="container bloc-md">
 		<div class="row">

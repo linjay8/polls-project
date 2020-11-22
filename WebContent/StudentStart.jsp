@@ -24,51 +24,34 @@
 <!-- JSP checking for existing error message -->
 <%
 		String errorMessageClass = (String)request.getAttribute("errorMessageClass");
-		String errorMessageLink = (String)request.getAttribute("errorMessageLink");
 		String classString = "";
-		String meetingLimitString = "";
-		String timeslotString = "";
-		String linkString = "";
-		String startTimeString = "";
-		String endTimeString = "";
-		if (errorMessageClass != null || errorMessageLink != null) {
-			if (errorMessageClass == null)
-			{
-				errorMessageClass = "";
-			}
-			else if (errorMessageLink == null)
-			{
-				errorMessageLink = "";
-			}
+		
+		if (errorMessageClass != null) {
 			classString = request.getParameter("class");
-			meetingLimitString = request.getParameter("meetinglimit");
-			timeslotString = request.getParameter("timeslot");
-			linkString = request.getParameter("link");
-			startTimeString = request.getParameter("starttime");
-			endTimeString = request.getParameter("endtime");
 		} else {
 			errorMessageClass = "";
-			errorMessageLink = "";
 		}
 %>
 <!-- JSP end -->
 
 <!-- body -->
 
+<form id="form_1" data-form-type="blocs-form" action="StudentServletStart">
+	<div class="form-group" id="formclass">
+		<label>
+			Class Code
+		</label>
+		<input id="class" name="class" value="<%= classString %>"class="form-control"/>
+		<%= errorMessageClass %>
+		<br/>
+		<br/>
 
-<div class="bloc l-bloc none " id="demobody">
-	<div class="container bloc-md">
-		<div class="row">
-			<div class="col-md-6">
-				<form id="form_1" data-form-type="blocs-form" action="StudentServletStart">
-					<button class="bloc-button btn btn-lg btn-block btn-clean btn-d" name = "joinOHButton" type="submit" id="joinOHButton">
-						Join OH!
-					</button>
-				</form>
-			</div>
-		</div>
 	</div>
-</div>
+	<button class="bloc-button btn btn-lg btn-block btn-clean btn-d" name = "joinOHButton" type="submit" id="joinOHButton">
+						Join OH!
+	</button>
+</form>
+
 <!-- demobody END -->
 
 </div>

@@ -56,7 +56,7 @@ class JUnitChat {
 		   ArrayList<Integer> list6 = chatDB.getAvailableStudents(s2ID);
 		   ArrayList<Integer> list7 = chatDB.getAvailableStudents(i1ID);
 		   ArrayList<Integer> list8 = chatDB.getAvailableStudents(i2ID);
-		    
+		   
 		   assertEquals(true, list1.equals(list5)); 
 		   assertEquals(true, list2.equals(list6)); 
 		   assertEquals(true, list3.equals(list7)); 

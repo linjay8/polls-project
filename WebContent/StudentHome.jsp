@@ -17,11 +17,11 @@
 	
 	<a href="Enroll.html">Add a new class</a>
 	<br>
-	<a href="PollResponse.jsp">View new polls</a>
-	<br>
-	<a href="PollResponse.jsp">View previous polls</a>
+	<a href="PollList">View class polls</a>
 	<br>
 	<a href="PublicPollList">View public polls</a>
+	<br>
+	<a href="OldPolls">View previous polls</a>
 	<br>
 	<a href="availableChatrooms">Start Chatting</a>
 	

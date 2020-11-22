@@ -11,9 +11,8 @@
 	<% String email = (String)request.getSession().getAttribute("email"); %>
 	
 	<form name="myForm" action = "PollList" method = "GET">
-		[For testing] Enter class code <input type="text" name="classCode"/>
+		Enter class code <input type="text" name="classCode"/>
 		<br>
-		[For testing] Enter user token <input type="text" name="userId"/>
 		<input type = "submit" value = "Submit" />  
 	</form>
 

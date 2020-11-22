@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.sound.midi.SysexMessage;
+
 import models.DatabaseUtil;
 import models.Poll;
 import models.Response;
@@ -96,7 +98,7 @@ public class PollDatabaseHandler {
 		
 
 		Connection connection = DriverManager.getConnection(jdbcURL, dbUser, dbPassword);
-		String sql = "Select count from Response "
+		String sql = "Select numVotes from Response "
 				+ "Inner join Poll on Poll.questionID = Response.questionID "
 				+ "where Poll.questionID=" + pollId + ";";	
 		PreparedStatement PS = connection.prepareStatement(sql);
@@ -152,12 +154,12 @@ public class PollDatabaseHandler {
 		
 	
 	// Functions to get poll information by classId
-	public ArrayList<Integer> getPollIdByClass(int classId) throws SQLException {
+	public ArrayList<Integer> getPollIdByClass(String classId) throws SQLException {
 		ArrayList<Integer> output = new ArrayList<Integer>();
 		
 		
 		Connection connection = DriverManager.getConnection(jdbcURL, dbUser, dbPassword);
-		String sql = "Select questionID from Poll where Poll.classCode=" + classId + ";";	
+		String sql = "Select questionID from Poll where Poll.classCode='" + classId + "';";	
 		PreparedStatement PS = connection.prepareStatement(sql);
 		ResultSet rs = PS.executeQuery();
 		
@@ -223,16 +225,20 @@ public class PollDatabaseHandler {
 		return output;
 	}
 	
-	public ArrayList<Integer> getStudentList(int pollId) throws SQLException{
-		ArrayList<Integer> output = new ArrayList<Integer>();
+	public ArrayList<String> getStudentList(int pollId) throws SQLException{
+		ArrayList<String> output = new ArrayList<String>();
 
 		Connection connection = DriverManager.getConnection(jdbcURL, dbUser, dbPassword);
-		String sql = "SELECT studentID FROM UserResponse WHERE questionID=" + pollId + ";";
+		//String sql = "SELECT studentID FROM UserResponse WHERE questionID=" + pollId + ";";
+		String sql = "Select email from UserInfo \n" + 
+				"Inner Join UserResponse\n" + 
+				"ON UserResponse.studentID = UserInfo.userID\n" + 
+				"WHERE questionID= " + pollId + ";";
 		PreparedStatement PS = connection.prepareStatement(sql);
 		ResultSet rs = PS.executeQuery();
 		
 		while (rs.next()) {
-            output.add(rs.getInt(1));
+            output.add(rs.getString(1));
         }
 
 		connection.close();

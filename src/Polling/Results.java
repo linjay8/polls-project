@@ -20,7 +20,7 @@ public class Results extends HttpServlet
 		PrintWriter out = response.getWriter();
 		
 		// Variables to help print results
-		int classCode = Integer.parseInt(request.getParameter("classCode"));
+		String classCode = request.getParameter("classCode");
 		PollDatabaseHandler dbHandler = new PollDatabaseHandler();
 		try{
 			String title = "Using GET Method to Read Form Data";
@@ -51,7 +51,7 @@ public class Results extends HttpServlet
 			
 			// Might want to use a separate form instead of a button?
 			out.print("<br><br>");
-			out.print("<a href=\"InstructorHome.html\">Home</a>");
+			out.print("<a href=\"InstructorHome.jsp\">Home</a>");
 	
 			out.println("</body>");
 			out.println("</html>");

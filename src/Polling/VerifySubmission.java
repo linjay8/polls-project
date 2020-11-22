@@ -19,9 +19,17 @@ public class VerifySubmission extends HttpServlet
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 		String email = (String)request.getSession().getAttribute("email"); 
+		String nextPage;
+		if (email != null) {
+			nextPage = "StudentHome.jsp";
+		}
+		else {
+			nextPage = "GuestHome";
+		}
 		
 		// Get Variables from previous page
-		int classCode = Integer.parseInt(request.getParameter("classCode"));
+
+		
 		int pollId = Integer.parseInt(request.getParameter("pollId"));
 		String userId = request.getParameter("userId");
 		
@@ -33,8 +41,6 @@ public class VerifySubmission extends HttpServlet
 		
 		// Send hidden variables to next page if needed
 		out.print("<input type = \"hidden\" name = \"pollId\" id = \"pollId\" value = " + pollId + ">");
-		out.print("<input type = \"hidden\" name = \"classCode\" value = " + classCode+ ">");
-	//	out.print("<input type = \"hidden\" name = \"userId\" value = " + userId+ ">");
 	
 		String text = "";
 
@@ -87,7 +93,7 @@ public class VerifySubmission extends HttpServlet
 			
 			out.println("<script type=\"text/javascript\">");
 			out.println("alert('Thank you. Your response has been recorded. ');");
-			out.println("location='StudentHome.html';");
+			out.println("location='"  + nextPage + "';");
 			out.println("</script>");
 		//	request.getRequestDispatcher("/StudentHome.html").include(request, response);
 		}

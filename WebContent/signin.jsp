@@ -45,7 +45,7 @@
         console.log("ID Token: " + id_token);
         
         account_level = 1;
-        
+         
         var redirectUrl = 'AuthenticationServlet';
         var form = $('<form action="' + redirectUrl + '" method="post">' +
                 '<input type="text" name="id_token" value="' +
@@ -98,6 +98,12 @@
           
         }
     </script>
+    
+    <br>
+	<form name="myForm" action = "PublicPollList" method = "GET">
+		<input type=hidden name="accLevel" value="0"></input>
+		<input type = "submit" value = "Sign is as guest" />  
+	</form>
     
 	</body>
 </html>

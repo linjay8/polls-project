@@ -1,4 +1,5 @@
 package Polling;
+import models.Credentials;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 
 import javax.sound.midi.SysexMessage;
 
+import models.Credentials;
 import models.DatabaseUtil;
 import models.Poll;
 import models.Response;
@@ -17,8 +19,8 @@ public class PollDatabaseHandler {
 	int classCode;
 	
 	String jdbcURL = "jdbc:mysql://localhost:3306/FinalProject";
-	String dbUser = "root";
-	String dbPassword = "root";
+	static String dbUser = Credentials.user;
+	static String dbPassword = Credentials.pwd;
 	
 	
 	public PollDatabaseHandler(Poll poll) {

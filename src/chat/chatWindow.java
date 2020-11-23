@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import models.DatabaseUtil;
+import models.Student;
 
 @WebServlet(name = "chatWindow", urlPatterns = { "/chatWindow" })
 public class chatWindow extends HttpServlet {
@@ -32,9 +33,17 @@ public class chatWindow extends HttpServlet {
 		try (PrintWriter out = response.getWriter()) {
 			
 			
+			
 			String message = request.getParameter("txtMsg"); // Extract Message
 		
 			senderId = DatabaseUtil.getUserId(senderID);
+			Student st2 = DatabaseUtil.getStudentFromId(senderId);
+			if (st2 != null) {
+				out.println("<a href=\"StudentHome.jsp\">Back to Home</a>");
+			} else {
+				out.println("<a href=\"InstructorHome.jsp\">Back to Home</a>");
+			}
+			
 			int recipientIdFinal = Integer.parseInt(recipientID);
 			
 			if (!chatDB.verifyChat(senderId, recipientIdFinal)) {

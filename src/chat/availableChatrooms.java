@@ -40,9 +40,12 @@ public class availableChatrooms extends HttpServlet {
 			Instructor in2 = null;
 			ArrayList<Class> classes = null;
 			boolean isInstructor = false;
+			
 			if (st2 != null) {
+				out.println("<a href=\"StudentHome.jsp\">Back to Home</a>");
 				classes = DatabaseUtil.getClassesFromStudent(st2);
 			} else {
+				out.println("<a href=\"InstructorHome.jsp\">Back to Home</a>");
 				isInstructor = true;
 				in2 = DatabaseUtil.getInstructorFromId(senderId);
 				classes = DatabaseUtil.getClassesFromInstructor(in2);

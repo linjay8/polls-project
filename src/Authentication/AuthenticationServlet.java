@@ -31,8 +31,8 @@ public class AuthenticationServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
-		String nextPageInstructor = "/InstructorHome.html";
-		String nextPageStudent = "/StudentHome.html";
+		String nextPageInstructor = "/InstructorHome.jsp";
+		String nextPageStudent = "/StudentHome.jsp";
 
 		String id_token = request.getParameter("id_token");
 		// response.getWriter().append("Served at: ").append(request.getContextPath()).append(" \nid_token = ").append(id_token);
@@ -62,6 +62,7 @@ public class AuthenticationServlet extends HttpServlet {
 		if(!DatabaseUtil.userExists(email)) {
 			DatabaseUtil.addNewUser(firstname + " " + lastname, email, Integer.valueOf(accountlevel));
 		}
+		
 	
 	}
 		

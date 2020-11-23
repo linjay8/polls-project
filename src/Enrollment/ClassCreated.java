@@ -30,6 +30,8 @@ public class ClassCreated extends HttpServlet {
       Class c = i.createNewClass(cn);
       String classCode = c.getClassCode();
       out.println("Class created! The class code is " + classCode);
+      
+      out.println("<br><a href=\"InstructorHome.jsp\" ></a>");
    }
 
    public void destroy() {

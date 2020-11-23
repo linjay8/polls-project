@@ -3,25 +3,35 @@
 <!DOCTYPE html>
 <html>
 <head>
+<%@ page import = "models.*" %>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Student Home</title>
+<link rel="stylesheet" type="text/css" href="homePageStyles.css" />
 </head>
+
 <body>
 
 	<% 
-		String email = (String)request.getSession().getAttribute("email"); 
+		String email = (String)request.getSession().getAttribute("email");
+	 	/* String name = DatabaseUtil.getStudent(email).getFullName(); */
 	%>
 	
-	<h1>Student Home Page</h1>
-	<p>add name, class list </p>
 	
+	<h1>Student Home Page</h1>
+	<%-- <p>Welcome,  <%=name %> </p> --%>
+	<br>
+	<br>
 	<a href="Enroll.html">Add a new class</a>
+	<br>
 	<br>
 	<a href="PollList">View class polls</a>
 	<br>
+	<br>
 	<a href="PublicPollList">View public polls</a>
 	<br>
+	<br>
 	<a href="OldPolls">View previous polls</a>
+	<br>
 	<br>
 	<a href="availableChatrooms">Start Chatting</a>
 	
@@ -37,9 +47,6 @@
 	<input type = "submit" value = "Submit" />  
 	</form>
 	 -->
-	<br></br>
-	<h1>Viewable Polls</h1>
-	
 
 </body>
 </html>

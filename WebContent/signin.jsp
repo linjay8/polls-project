@@ -100,7 +100,7 @@
     </script>
     
     <br>
-	<form name="myForm" action = "PublicPollList" method = "GET">
+	<form name="myForm" action = "GuestHome" method = "GET">
 		<input type=hidden name="accLevel" value="0"></input>
 		<input type = "submit" value = "Sign is as guest" />  
 	</form>

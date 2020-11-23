@@ -26,7 +26,9 @@ public class Enrolled extends HttpServlet {
       PrintWriter out = response.getWriter();
       String cc = request.getParameter("class_code");
       
+      System.out.println("EMAIL " +(String)request.getSession().getAttribute("email") );
       Student s = DatabaseUtil.getStudent((String)request.getSession().getAttribute("email"));
+    
       s.enrollClass(cc);
       Class c = DatabaseUtil.getClass(cc);
       out.println(s.getFullName() + ", welcome to " + c.getClassName());

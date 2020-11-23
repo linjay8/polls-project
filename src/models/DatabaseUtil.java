@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.io.*;
 public class DatabaseUtil {
 	static String db = "jdbc:mysql://localhost:3306/FinalProject?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=America/Los_Angeles";
-	static String user = "root";
-	static String pwd = "root";
+	static String user = Credentials.user;
+	static String pwd = Credentials.pwd;
 	
 	// Adds a new class into the database
 	public static void addNewClass(Class c, int userId)
@@ -267,6 +267,7 @@ public class DatabaseUtil {
 				PreparedStatement ps = conn.prepareStatement(sql);)
 		{
 			ps.setInt(1, instructorId);
+			ps.setInt(2, instructorId);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next())
 			{

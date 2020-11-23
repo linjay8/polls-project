@@ -56,7 +56,7 @@ public class GuestHome extends HttpServlet
 			
 			// Might want to use a separate form instead of a button?
 			out.print("<br><br>");
-			out.print("<a href=\"StudentHome.html\">Home</a>");
+			out.print("<a href=\"GuestHome\">Home</a>");
 	
 			out.println("</body>");
 			out.println("</html>");

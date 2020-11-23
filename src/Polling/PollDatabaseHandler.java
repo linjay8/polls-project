@@ -132,10 +132,9 @@ public class PollDatabaseHandler {
 	
 	
 	// Functions to get all Poll ID's
-		public ArrayList<Integer> getPollIdList() throws SQLException{
+		public ArrayList<Integer> getPublicPollIdList() throws SQLException{
 			ArrayList<Integer> output = new ArrayList<Integer>();
 
-			
 			Connection connection = DriverManager.getConnection(jdbcURL, dbUser, dbPassword);
 			String sql = "SELECT questionID FROM Poll Where isPublic=true;";
 			PreparedStatement PS = connection.prepareStatement(sql);
@@ -234,6 +233,43 @@ public class PollDatabaseHandler {
 				"Inner Join UserResponse\n" + 
 				"ON UserResponse.studentID = UserInfo.userID\n" + 
 				"WHERE questionID= " + pollId + ";";
+		PreparedStatement PS = connection.prepareStatement(sql);
+		ResultSet rs = PS.executeQuery();
+		
+		while (rs.next()) {
+            output.add(rs.getString(1));
+        }
+
+		connection.close();
+		
+		return output;
+		
+	}
+	
+	
+	public ArrayList<Integer> getPollIdByStudent(String email) throws SQLException{
+		ArrayList<Integer> output = new ArrayList<Integer>();
+
+		
+		Connection connection = DriverManager.getConnection(jdbcURL, dbUser, dbPassword);
+		String sql = "SELECT questionID FROM Poll Where isPublic=true;";
+		PreparedStatement PS = connection.prepareStatement(sql);
+		ResultSet rs = PS.executeQuery();
+		
+		while (rs.next()) {
+            output.add(rs.getInt(1));
+        }
+
+		connection.close();
+		
+		return output;
+	}
+	
+	public ArrayList<String> getStudentPublicResponses(int pollId) throws SQLException{
+		ArrayList<String> output = new ArrayList<String>();
+
+		Connection connection = DriverManager.getConnection(jdbcURL, dbUser, dbPassword);
+		String sql = "Select StudentID from UserResponse where questionID=" + pollId + ";";
 		PreparedStatement PS = connection.prepareStatement(sql);
 		ResultSet rs = PS.executeQuery();
 		

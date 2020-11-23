@@ -67,11 +67,14 @@ public class OldPolls extends HttpServlet
 				}
 			}
 			
+	
+			
+//			
 			
 			
 			// Might want to use a separate form instead of a button?
 			if (listCount == 0) {
-				out.println("<h2>You haven't answered any polls for this class</h2>");
+				out.println("<h2>You haven't answered any polls</h2>");
 			}
 			out.print("<br><br>");
 			out.print("<a href=\"StudentHome.jsp\">Home</a>");

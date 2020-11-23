@@ -25,24 +25,22 @@ CREATE TABLE ClassMember (
     FOREIGN KEY (classcode) REFERENCES Class(classcode)
 );
 
-
- 
-CREATE TABLE Poll(
-	id INT NOT NULL AUTO_INCREMENT,
-    count INT,
-    isPublic BOOLEAN,
-    question VARCHAR(500),
-    classCode INT,
-    instructorID INT,
-    responseListID INT,
-    PRIMARY KEY(id)
+CREATE TABLE Response(
+	responseID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    response varchar(500),
+    numVotes int,
+    questionID int
 );
 
-CREATE TABLE Responses(
-	responseID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    response VARCHAR(500),
-    numVotes INT,
-    questionID INT
+CREATE TABLE Poll(
+	questionID int NOT NULL AUTO_INCREMENT,
+    count int,
+    isPublic boolean,
+    question varchar(500),
+    classcode VARCHAR(6),
+    instructorID varchar(200),
+    responseListID int,
+    PRIMARY KEY(questionID)
 );
 
 CREATE TABLE UserResponse (
@@ -50,10 +48,12 @@ CREATE TABLE UserResponse (
     studentID INT NOT NULL,
     questionID INT NOT NULL,
     responseID INT NOT NULL,
-    FOREIGN KEY (studentID) REFERENCES UserInfo(userID),
-    FOREIGN KEY (questionID) REFERENCES Poll(id),
-    FOREIGN KEY (responseID) REFERENCES Responses(responseID)
+    FOREIGN KEY (questionID) REFERENCES Poll(questionID),
+    FOREIGN KEY (responseID) REFERENCES Response(responseID)
 );
+
+
+
 
  CREATE TABLE Chat (
 	id INT NOT NULL AUTO_INCREMENT,
@@ -66,14 +66,13 @@ CREATE TABLE UserResponse (
 	FOREIGN KEY (sender_id) REFERENCES UserInfo(userID),
 	FOREIGN KEY (recipient_id) REFERENCES UserInfo(userID)
   );
+  
 
+SELECT * FROM UserResponse;
 SELECT * FROM UserInfo;
 SELECT * FROM Class;
 SELECT * FROM ClassMember;
 SELECT * FROM Poll;
-SELECT * FROM Responses;
+SELECT * FROM Response;
 SELECT * FROM UserResponse;
-SELECT * FROM Chat;
-
-
 

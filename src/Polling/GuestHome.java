@@ -31,7 +31,7 @@ public class GuestHome extends HttpServlet
 			
 			// For each poll in class, print answer choice with count
 			// Must verify that student has not answered poll
-			for (int pollId : dbHandler.getPollIdList()) {
+			for (int pollId : dbHandler.getPublicPollIdList()) {
 				ArrayList<String> resultList = dbHandler.getPollResults(pollId);
 				
 				out.print("<div>");

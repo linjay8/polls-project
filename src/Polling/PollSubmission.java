@@ -44,7 +44,7 @@ public class PollSubmission extends HttpServlet
 	
 		if (request.getParameter("classCode") == null) {
 			try{
-				for (int pollId : dbHandler.getPollIdList()) {
+				for (int pollId : dbHandler.getPublicPollIdList()) {
 					if (pId == pollId) {
 						ArrayList<String> resultList = dbHandler.getPollResults(pollId);
 						out.print("<div>");

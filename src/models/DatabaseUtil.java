@@ -261,7 +261,7 @@ public class DatabaseUtil {
 	public static ArrayList<Class> getClassesFromInstructor(Instructor i)
 	{
 		int instructorId = i.getUserId();
-		String sql = "SELECT c.* FROM UserInfo i, Class c WHERE c.instructorID = ?";
+		String sql = "SELECT c.* FROM UserInfo i, Class c WHERE c.instructorID = ? AND i.userID = ?";
 		ArrayList<Class> classes = new ArrayList<Class>();
 		try(Connection conn = DriverManager.getConnection(db, user, pwd);
 				PreparedStatement ps = conn.prepareStatement(sql);)

@@ -5,7 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
- 
+
+import javax.sound.midi.SysexMessage;
+
+import models.DatabaseUtil;
 import models.Poll;
 import models.Response;
 
@@ -45,7 +48,7 @@ public class PollDatabaseHandler {
 	public void savePoll() throws SQLException {
 	
 		Connection connection = DriverManager.getConnection(jdbcURL, dbUser, dbPassword);
-		String sql = "INSERT INTO Poll (questionID, count, isPublic, question, classCode) VALUES (?, ?, ?, ?, ?);";	
+		String sql = "INSERT INTO Poll (questionID, count, isPublic, question, classCode, instructorId) VALUES (?, ?, ?, ?, ?, ?);";	
 		// , instructorID, responseListID
 		PreparedStatement PS = connection.prepareStatement(sql);
 		PS.setInt(1, poll.getPollID());
@@ -57,6 +60,8 @@ public class PollDatabaseHandler {
 			PS.setString(5, null);
 		else
 			PS.setString(5, poll.getClassCode());
+		
+		PS.setString(6, poll.getEmail());
 			
 		this.saveResponses(connection);
 
@@ -81,6 +86,7 @@ public class PollDatabaseHandler {
 		while (rs.next()) {
             output.add(rs.getString(1));
         }
+		
 
 		connection.close();
 		
@@ -92,7 +98,7 @@ public class PollDatabaseHandler {
 		
 
 		Connection connection = DriverManager.getConnection(jdbcURL, dbUser, dbPassword);
-		String sql = "Select count from Response "
+		String sql = "Select numVotes from Response "
 				+ "Inner join Poll on Poll.questionID = Response.questionID "
 				+ "where Poll.questionID=" + pollId + ";";	
 		PreparedStatement PS = connection.prepareStatement(sql);
@@ -126,10 +132,9 @@ public class PollDatabaseHandler {
 	
 	
 	// Functions to get all Poll ID's
-		public ArrayList<Integer> getPollIdList() throws SQLException{
+		public ArrayList<Integer> getPublicPollIdList() throws SQLException{
 			ArrayList<Integer> output = new ArrayList<Integer>();
 
-			
 			Connection connection = DriverManager.getConnection(jdbcURL, dbUser, dbPassword);
 			String sql = "SELECT questionID FROM Poll Where isPublic=true;";
 			PreparedStatement PS = connection.prepareStatement(sql);
@@ -148,12 +153,12 @@ public class PollDatabaseHandler {
 		
 	
 	// Functions to get poll information by classId
-	public ArrayList<Integer> getPollIdByClass(int classId) throws SQLException {
+	public ArrayList<Integer> getPollIdByClass(String classId) throws SQLException {
 		ArrayList<Integer> output = new ArrayList<Integer>();
 		
 		
 		Connection connection = DriverManager.getConnection(jdbcURL, dbUser, dbPassword);
-		String sql = "Select questionID from Poll where Poll.classCode=" + classId + ";";	
+		String sql = "Select questionID from Poll where Poll.classCode='" + classId + "';";	
 		PreparedStatement PS = connection.prepareStatement(sql);
 		ResultSet rs = PS.executeQuery();
 		
@@ -167,6 +172,118 @@ public class PollDatabaseHandler {
 		return output;
 		
 	}
+	
+	
+	
+	public void addVote(String email, int pollId, int responseId) throws SQLException{
+		
+		Connection connection = DriverManager.getConnection(jdbcURL, dbUser, dbPassword);
+		String sql = "INSERT INTO UserResponse (studentID, questionID, responseID) VALUES (?,?,?); ";
+		
+		
+		PreparedStatement PS = connection.prepareStatement(sql);
+		
+		PS.setInt(1,DatabaseUtil.getUserId(email));
+		PS.setInt(2, pollId);
+		PS.setInt(3, responseId);
+		PS.executeUpdate();
+		
+		String sql2 = "SELECT numVotes FROM Response WHERE responseID = " + responseId + ";";	
+		PreparedStatement PS2 = connection.prepareStatement(sql2);
+		ResultSet rs2 = PS2.executeQuery();
+		
+		rs2.next();
+		int count = rs2.getInt(1);
+		count++;
+		
+		String sql3 = "UPDATE Response SET numVotes=" + count
+				+ " WHERE responseID = " + responseId + ";";	
+		PreparedStatement PS3 = connection.prepareStatement(sql3);
+//		ResultSet rs3 = PS3.executeQuery();
+		PS3.executeUpdate();
+		
+		connection.close();
+		
+
+	}
+	
+	
+	public int getResponseID(String _response, int pollId) throws SQLException {
+		System.out.println("TEST response=" + _response);
+		System.out.println("TEST pollId=" + pollId);
+		Connection connection = DriverManager.getConnection(jdbcURL, dbUser, dbPassword);
+		String sql = "SELECT responseID FROM Response WHERE response='" + _response + "' AND questionID= " + pollId + ";";	
+		PreparedStatement PS = connection.prepareStatement(sql);
+		ResultSet rs = PS.executeQuery();
+		
+		rs.next();
+		int output = rs.getInt(1);
+		
+		connection.close();
+		
+		return output;
+	}
+	
+	public ArrayList<String> getStudentList(int pollId) throws SQLException{
+		ArrayList<String> output = new ArrayList<String>();
+
+		Connection connection = DriverManager.getConnection(jdbcURL, dbUser, dbPassword);
+		//String sql = "SELECT studentID FROM UserResponse WHERE questionID=" + pollId + ";";
+		String sql = "Select email from UserInfo \n" + 
+				"Inner Join UserResponse\n" + 
+				"ON UserResponse.studentID = UserInfo.userID\n" + 
+				"WHERE questionID= " + pollId + ";";
+		PreparedStatement PS = connection.prepareStatement(sql);
+		ResultSet rs = PS.executeQuery();
+		
+		while (rs.next()) {
+            output.add(rs.getString(1));
+        }
+
+		connection.close();
+		
+		return output;
+		
+	}
+	
+	
+	public ArrayList<Integer> getPollIdByStudent(String email) throws SQLException{
+		ArrayList<Integer> output = new ArrayList<Integer>();
+
+		
+		Connection connection = DriverManager.getConnection(jdbcURL, dbUser, dbPassword);
+		String sql = "SELECT questionID FROM Poll Where isPublic=true;";
+		PreparedStatement PS = connection.prepareStatement(sql);
+		ResultSet rs = PS.executeQuery();
+		
+		while (rs.next()) {
+            output.add(rs.getInt(1));
+        }
+
+		connection.close();
+		
+		return output;
+	}
+	
+	public ArrayList<String> getStudentPublicResponses(int pollId) throws SQLException{
+		ArrayList<String> output = new ArrayList<String>();
+
+		Connection connection = DriverManager.getConnection(jdbcURL, dbUser, dbPassword);
+		String sql = "Select StudentID from UserResponse where questionID=" + pollId + ";";
+		PreparedStatement PS = connection.prepareStatement(sql);
+		ResultSet rs = PS.executeQuery();
+		
+		while (rs.next()) {
+            output.add(rs.getString(1));
+        }
+
+		connection.close();
+		
+		return output;
+		
+	}
+	
+	
 	
 	
 }

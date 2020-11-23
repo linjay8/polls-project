@@ -95,13 +95,13 @@ public class Instructor extends User
     }
 
     public Boolean startOfficeHours(Class c, int meetingLimit, double timeSlot, String link,
-			ZoneId timezone, String endTime)
+			ZoneId timezone, int minutesLong)
     {
-    	
-    	if (c.getInstructor() == this && currentOH == null)
+		ZonedDateTime start = ZonedDateTime.now(timezone);
+		ZonedDateTime end = start.plusMinutes(minutesLong);
+    	if ((c.getInstructor().getEmail().equals(this.getEmail())) && (currentOH == null))
     	{    		
-    		//System.out.println(ZonedDateTime.now(timezone) + " Instructor " + getFullName() + " is starting OH");
-        	OfficeHours oh = c.startOH(meetingLimit, timeSlot, link, timezone, ZonedDateTime.now(timezone), endTime);
+    		OfficeHours oh = c.startOH(meetingLimit, timeSlot, link, timezone, start, end, c.getClassCode());
         	currentOH = oh;
         	return true;
     	}
@@ -113,6 +113,7 @@ public class Instructor extends User
     	if (c.getOH() != null)
     	{
     		c.stopOH();
+    		OfficeHoursList.removeOH(currentOH);
     		currentOH = null;
     	}
     }

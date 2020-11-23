@@ -11,8 +11,9 @@ public class Student extends User
     private ArrayList<Class> classes;
     private Boolean inMeeting;
     private Boolean inWaiting;
-    private Class ohClass;
+    private String ohClassCode;
     private String ohLink;
+    private ZoneId timezone;
 
     public Student(String name_, String email_, int userId_)
     {
@@ -20,8 +21,8 @@ public class Student extends User
         this.classes = DatabaseUtil.getClassesFromStudent(this);   
         inMeeting = false;
         inWaiting = false;
-        ohClass = null;
-        ohLink = "";
+        ohClassCode = "";
+        timezone = ZoneId.systemDefault();
     }
 
     public ArrayList<Class> getClasses() 
@@ -29,9 +30,14 @@ public class Student extends User
         return classes;
     }
     
-    public Class getOHClass()
+    public ZoneId getTimezone()
     {
-    	return ohClass;
+    	return timezone;
+    }
+    
+    public String getOHClassCode()
+    {
+    	return ohClassCode;
     }
     
     public Boolean getInMeetingStatus()
@@ -94,7 +100,9 @@ public class Student extends User
     
 	public Boolean joinOH (Class c)
     {
-    	if (classes.contains(c) && c.getOH() != null && ohClass == null)
+    	if (DatabaseUtil.alreadyEnrolled(c.getClassCode(), userId) 
+    			&& OfficeHoursList.getOH(c.getClassCode()) != null 
+    			&& ohClassCode.isEmpty())
     	{
     		// check time constraint
     		if (ZonedDateTime.now(c.getTimezone()).isBefore(c.getOH().getStartTime())
@@ -102,20 +110,21 @@ public class Student extends User
     		{
     			return false;
     		}
-    		ohClass = c;
-    		c.getOH().addStudentToWaiting(this);
+    		ohClassCode = c.getClassCode();
+    		System.out.println (ZonedDateTime.now(c.getTimezone()) + " Student " + getFullName() + " is joining OH queue");
+    		OfficeHoursList.getOH(ohClassCode).addStudentToWaiting(this);
     		return true;
     	}
     	return false;
     }
     
     public void startingTurn() {
-		System.out.println (ZonedDateTime.now(ohClass.getTimezone()) + " Student " + getFullName() + " is starting turn in meeting.");
+		System.out.println (ZonedDateTime.now(OfficeHoursList.getOH(ohClassCode).getTimezone()) + " Student " + getFullName() + " is starting turn in meeting.");
 
 	}
 
 	public void finishingTurn() {
-		System.out.println (ZonedDateTime.now(ohClass.getTimezone()) + " Student " + getFullName() + " is ending turn in meeting.");
+		System.out.println (ZonedDateTime.now(OfficeHoursList.getOH(ohClassCode).getTimezone()) + " Student " + getFullName() + " is ending turn in meeting.");
 	}
     
     public void leaveWaitingList(Class c)
@@ -131,15 +140,15 @@ public class Student extends User
 		try
 		{
 			startingTurn();
-			Thread.sleep((long)(ohClass.getOH().getTimeSlot() * 60000));
+			Thread.sleep((long)(OfficeHoursList.getOH(ohClassCode).getTimeSlot() * 60000));
 		}
 		catch (InterruptedException ie) {}
 		finally
 		{
 			// finish delivery
 			finishingTurn();
-			ohClass.getOH().removeStudentFromMeeting(this);
-			ohClass = null;
+			OfficeHoursList.getOH(ohClassCode).removeStudentFromMeeting(this);
+			ohClassCode = "";
 		}
 		inMeeting = false;
 	}

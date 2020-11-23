@@ -36,7 +36,7 @@ public class InstructorServlet extends HttpServlet {
 		String meetingLimitString = request.getParameter("meetinglimit");
 		String timeslotString = request.getParameter("timeslot");
 		String linkString = request.getParameter("link");
-		String endTimeString = request.getParameter("endtime");
+		String minLongString = request.getParameter("minlong");
 		String emailString = (String)request.getSession().getAttribute("email");
 		
 		if (classString == null || classString.isEmpty())
@@ -51,11 +51,40 @@ public class InstructorServlet extends HttpServlet {
 			nextPage = "/InstructorStart.jsp";
 		}
 		
+		if (meetingLimitString == null || meetingLimitString.isEmpty())
+		{
+			meetingLimitString = "5";
+		}
+		if (timeslotString == null || timeslotString.isEmpty())
+		{
+			timeslotString = "15";
+		}
+		if (minLongString == null || timeslotString.isEmpty())
+		{
+			minLongString = "60";
+		}
+		
 		if (request.getParameter("startOHButton") != null) {
 			Instructor i = DatabaseUtil.getInstructor(emailString);
-			Class c = DatabaseUtil.getClass(classString);
-			i.startOfficeHours(c, Integer.parseInt(meetingLimitString), Double.parseDouble(timeslotString), 
-					linkString, ZoneId.systemDefault(), endTimeString);
+			models.Class c = DatabaseUtil.getClass(classString);
+			if (c == null)
+			{
+				request.setAttribute("errorMessageClassDNE", "Instructor is not registered for this class");
+				nextPage = "/InstructorStart.jsp";
+			}
+			if (!DatabaseUtil.getClassesFromInstructor(i).contains(c))
+			{
+				request.setAttribute("errorMessageInstructorClass", "Instructor is not registered for this class");
+				nextPage = "/InstructorStart.jsp";
+			}
+			
+			
+			if(!i.startOfficeHours(c, Integer.parseInt(meetingLimitString), Double.parseDouble(timeslotString), 
+					linkString, ZoneId.systemDefault(), Integer.parseInt(minLongString))) 
+			{
+				request.setAttribute("errorMessageStart", "Unable to start office hours");
+				nextPage = "/InstructorStart.jsp";
+			}
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextPage);
 			dispatcher.forward(request, response);
 		}

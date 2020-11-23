@@ -3,11 +3,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+   <%@ page import = "models.*" %>
 <meta charset="UTF-8">
 	<link rel="stylesheet" type="text/css" href="style.css" />
 
 <title>Office Hours Started!</title>
-<%@ page import="models.*" %>
 </head>
 <body>
 	<h1>Instructor Office Hours Started</h1>
@@ -17,17 +17,19 @@
     	<div id="gallery-text-left">
     	<p id="gallery-paragraph-1">
 		<!-- print students in meeting -->
-    	<% 
-    	String emailString = request.getParameter("email");
-		Instructor i = DatabaseUtil.getInstructor(emailString);
-		
-		response.setIntHeader("Refresh", (int)i.getCurrentOH().getTimeSlot());
-    	
-    	for (Student s : i.getCurrentOH().getStudentsInMeeting()) 
-    	{
-    		out.println(s.getFullName()); %>
+    	<%-- <%
+    		String emailString = (String)request.getSession().getAttribute("email");
+    		Instructor i = DatabaseUtil.getInstructor(emailString);
+   			
+    	//	System.out.println("TIME " + (int)i.getCurrentOH().getTimeSlot());
+   			response.setIntHeader("Refresh", 15);
+   	    	
+   	    	for (Student s : i.getCurrentOH().getStudentsInMeeting()) 
+   	    	{
+   	    		out.println(s.getFullName());
+  	%>
     		<br/>
-    	<%}%>
+    	<%}%> --%>
     	</p>
     </div>
    	<div id="gallery-text">
@@ -35,14 +37,14 @@
     	<div id="gallery-text-left">
     	<p id="gallery-paragraph-1">
     	<!-- print students in wait list -->
-    	<%
+    	<%-- <%
     	int count = 0;
     	for (Student s : i.getCurrentOH().getWaitingStudents()) 
     	{
-    		out.println(count + ": " + s.getFullName()); %>
-    		count++;
-    		<br/>
-    	<%}%>
+    		out.println(count + ": " + s.getFullName());  
+    		count++;}%> --%>
+    		
+
     	</p>
     </div>
 </div>

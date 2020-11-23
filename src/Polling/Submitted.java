@@ -50,7 +50,7 @@ public class Submitted extends HttpServlet
 		out.print( "</ul>\n");
 		
 		// Might want to use a separate form instead of a button?
-		out.print("<a href=\"InstructorHome.html\">OK</a>");
+		out.print("<a href=\"InstructorHome.jsp\">OK</a>");
 		
 		
 		out.println("</body>");

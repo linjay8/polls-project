@@ -37,7 +37,7 @@ public class StudentServletResults extends HttpServlet {
 		String classString = request.getParameter("class");
 		String emailString = (String)request.getSession().getAttribute("email");
 		Student s = DatabaseUtil.getStudent(emailString);
-		Class c = DatabaseUtil.getClass(classString);
+		models.Class c = DatabaseUtil.getClass(classString);
 		
 		if (request.getParameter("leaveOHButton") != null) {
 			s.leaveWaitingList(c);

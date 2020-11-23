@@ -38,7 +38,7 @@ public class InstructorServletResults extends HttpServlet {
 		String classString = request.getParameter("class");
 		
 		Instructor i = DatabaseUtil.getInstructor(emailString);
-		Class c = DatabaseUtil.getClass(classString);
+		models.Class c = DatabaseUtil.getClass(classString);
 		
 		
 		

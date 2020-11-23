@@ -1,5 +1,6 @@
 package Polling;
-
+import models.DatabaseUtil;
+import models.Student;
 
 import java.io.*;
 import java.sql.SQLException;
@@ -20,45 +21,70 @@ public class PublicPollList extends HttpServlet
 		// Variables to help print results
 //		String studentId = request.getParameter("studentId");
 		PollDatabaseHandler dbHandler = new PollDatabaseHandler();
-		try{
+		try{			
 			String title = "Public Polls";
 			out.println("<html>");
 			out.println("<head><title>" + title + "</title></head>");
 			out.println("<body>");
-			out.println("<h4>Public Polls</h4>");
+
+			
+			// Determine next page
+			String email = (String)request.getSession().getAttribute("email"); 
+			String nextPage;
+			
+			int accLevel = DatabaseUtil.getAccountLevel(email);
+			System.out.println(email + " " + accLevel);
+			
+			
+			if (accLevel == 2) {
+				nextPage = "InstructorHome.jsp";
+			}
+			else if (accLevel == 1) {
+				nextPage = "StudentHome.jsp";
+			}
+			else {
+				out.println("<h1> Welcome, Guest.</h1>");
+				nextPage = "GuestHome";
+				
+			}
+			
+			out.println("<h2>Available Public Polls</h2>");
 			
 			
 			// For each poll in class, print answer choice with count
 			// Must verify that student has not answered poll
-			for (int pollId : dbHandler.getPollIdList()) {
-				ArrayList<String> resultList = dbHandler.getPollResults(pollId);
+			
+			for (int pollId : dbHandler.getPublicPollIdList()) {
+				ArrayList<String> studentList = dbHandler.getStudentList(pollId);
 				
-				out.print("<div>");
-				out.print("<form name=" + pollId + " action=\"PollSubmission\" method=GET>" );
-				
-				out.print("\n" + "  <li><b>Question</b>: " 
-						+ dbHandler.getQuestion(pollId) +  "\n" );
-				 for (int i = 0 ; i < resultList.size(); i++) {
-			            out.print(" <li>" + resultList.get(i) +" \n");
-			     }
-				out.print( "</ul>");
-				out.print( "<br></br>");
-
-				// Pass hidden variables to next page
-				out.print("<input type = \"hidden\" name = \"pollId\" id = \"pollId\" value = " + pollId + ">");
-			//	out.print("<input type = \"hidden\" name = \"classCode\" value = " + classCode+ ">");
-//				out.print("<input type = \"hidden\" name = \"studentId\" value = " + studentId+ ">");
-				
-				out.print("<input type = \"submit\" value = \"Answer this poll\" /> ");
-				out.print("</form>");
-				out.print("</div> <br><br>");
+				if (!alreadyAnswered(studentList, email)) {
+					ArrayList<String> resultList = dbHandler.getPollResults(pollId);
+					
+					out.print("<div>");
+					out.print("<form name=" + pollId + " action=\"PollSubmission\" method=GET>" );
+					
+					out.print("\n" + "  <li><b>Question</b>: " 
+							+ dbHandler.getQuestion(pollId) +  "\n" );
+					 for (int i = 0 ; i < resultList.size(); i++) {
+				            out.print(" <li>" + resultList.get(i) +" \n");
+				     }
+					out.print( "</ul>");
+					out.print( "<br></br>");
+	
+					// Pass hidden variables to next page
+					out.print("<input type = \"hidden\" name = \"pollId\" id = \"pollId\" value = " + pollId + ">");
+					
+					out.print("<input type = \"submit\" value = \"Answer this poll\" /> ");
+					out.print("</form>");
+					out.print("</div> <br><br>");
+				}
 			}
 			
 	       
 			
 			// Might want to use a separate form instead of a button?
 			out.print("<br><br>");
-			out.print("<a href=\"StudentHome.html\">Home</a>");
+			out.print("<a href=" + nextPage  +">Home</a>");
 	
 			out.println("</body>");
 			out.println("</html>");
@@ -67,5 +93,14 @@ public class PublicPollList extends HttpServlet
 			e.printStackTrace();
 		}
 
+	}
+	
+	
+	private boolean alreadyAnswered(ArrayList<String> studentList, String student) {
+		for (String s : studentList) {
+			if (student.compareTo(s) == 0)
+				return true;
+		}
+		return false;
 	}
 }

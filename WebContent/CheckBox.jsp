@@ -1,69 +1,46 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<title>Checkbox</title>
+<meta charset="UTF-8">
+<title>Create a Poll</title>
 </head>
-<%!  
-	String classCode="";
-	String values1="";
-	String values2="";
-	String values3="";
-	String values4="";
-	String private_= "";
-	String public_= "";
-	
-	
-%>
-<body>
-<h1>Reading Checkbox Data</h1>
-<ul>
- 	<!-- Check if class code exists -->
-	<!-- Check that classCode input has only numbers-->
-	
-	<% classCode = request.getParameter("classCode"); 
-	if( !classCode.equals("") )%>
-		<li><%= classCode %> </li>
+   <body>
+    	<%String email = (String)request.getSession().getAttribute("email"); %>
+   
+      	<form name="myForm" action = "PollCreation" method = "GET" onsubmit="return validate()">
+      	
+      	
+      	Class Code <input type="text" name="classCode"/>
+        <br /><br />
+      	
+      	Poll Visibility
+      	<br /><br />
+      	Private <input type="checkbox" name="private" value="Private"/>
+      	Public <input type="checkbox" name="public" value="Public"/>
+      	<br /><br />
+      	
+      	
+        Question: <input type="text" name="question"/>
+      	<br /><br />
+      	
+   		Design your answers:
+   		<br /><br />
+   		
+        Answer A <input type="text" name="answer1"/>
+        <br /><br />
+        Answer B<input type="text" name="answer2"/>
+        <br /><br />
+        Answer C  <input type="text" name="answer3"/>
+        <br /><br />
+        Answer D<input type="text" name="answer4"/>
+        <br /><br />
+        
+        <input type = "submit" value = "Submit" />  
+        
+      </form>
 
-	<!-- Check that only one box is selected -->
-	<% public_ = request.getParameter("public");
-	private_ = request.getParameter("private"); 
-	
-	if( classCode.equals("") && public_.equals("Public") )%>
-		<li><%= "Poll is public" %> </li>
-	
-<%-- 	<% if(!classCode.equals("") && private_.equals("Private"))%> 
-		<li>"Poll is private" </li> --%>
-	
-
-
-
-
-	<!-- Handle value equals null -->
-	<% values1 = request.getParameter("answer1"); 
-	if(! (values1.equals(""))){%>
-		<li><%= values1 %> </li>
-	<%}%>
-	
-	<% values2 = request.getParameter("answer2"); 
-	if( ! (values2.equals(""))){%>
-		<li><%= values2 %> </li>
-	<%}%>
-		
-	<% values3 = request.getParameter("answer3"); 
-	if( ! (values3.equals(""))){%>
-		<li><%= values3 %> </li>
-	<%}%>
-		
-	<% values4 = request.getParameter("answer4"); 
-	if( !(values4.equals(""))){%>
-		<li><%= values4 %> </li>
-	<%}%>
-	
-	
-</ul>
-</body>
+      
+   </body>
 </html>

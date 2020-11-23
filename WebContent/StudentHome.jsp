@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,16 +7,21 @@
 <title>Insert title here</title>
 </head>
 <body>
+
+	<% 
+		String email = (String)request.getSession().getAttribute("email"); 
+	%>
+	
 	<h1>Student Home Page</h1>
 	<p>add name, class list </p>
 	
 	<a href="Enroll.html">Add a new class</a>
 	<br>
-	<a href="PollResponse.jsp">View new polls</a>
-	<br>
-	<a href="PollResponse.jsp">View previous polls</a>
+	<a href="PollList">View class polls</a>
 	<br>
 	<a href="PublicPollList">View public polls</a>
+	<br>
+	<a href="OldPolls">View previous polls</a>
 	<br>
 	<a href="availableChatrooms">Start Chatting</a>
 	

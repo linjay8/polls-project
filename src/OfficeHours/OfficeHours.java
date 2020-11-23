@@ -2,8 +2,11 @@ package OfficeHours;
 
 import models.*;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -120,6 +123,11 @@ public class OfficeHours implements Runnable {
 		return endTime;
 	}
 	
+	public String getLink()
+	{
+		return link;
+	}
+	
 	public Boolean ohOpen()
 	{
 		if (ZonedDateTime.now(timezone).isBefore(startTime) 
@@ -135,7 +143,7 @@ public class OfficeHours implements Runnable {
 		student.setInWaitingStatus(true);
 		waitingList.add(student);
 		waitingSize++;
-		System.out.println (ZonedDateTime.now(timezone) + " Student " + student.getFullName() + " is waiting");
+		System.out.println (ZonedDateTime.now(timezone) + " Student " + student.getFullName() + " is in waiting list");
 		return true;
 	}
 	
@@ -159,9 +167,7 @@ public class OfficeHours implements Runnable {
 		
 				
 		try {
-			System.out.println("Run ClientThread.Java now");
-			System.out.println("Note: If this was on webpage, clicking a button would run "
-					+ "ClientThread.java automatically");
+			System.out.println("Run ClientThread.Java now to simulate clicking a button to accept meeting invite to " + student.getFullName());
 			
 			Socket s = ss.accept();
 			pw = new PrintWriter(s.getOutputStream(), true);
@@ -178,8 +184,10 @@ public class OfficeHours implements Runnable {
 		catch (SocketTimeoutException st) 
 		{
 			semaphore.release();
+			System.out.println("Meeting invite expired.");
 		}
 		catch (IOException e2) {}
+		
 	}
 	
 	public void removeStudentFromMeeting(Student student)

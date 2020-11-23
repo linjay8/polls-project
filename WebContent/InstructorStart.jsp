@@ -30,28 +30,47 @@
 
 		String errorMessageClass = (String)request.getAttribute("errorMessageClass");
 		String errorMessageLink = (String)request.getAttribute("errorMessageLink");
+		String errorMessageStart = (String)request.getAttribute("errorMessageStart");
+		String errorMessageClassDNE = (String)request.getAttribute("errorMessageClassDNE");
+		String errorMessageInstructorClass = (String)request.getAttribute("errorMessageInstructorDNE");
 		String classString = "";
 		String meetingLimitString = "";
 		String timeslotString = "";
 		String linkString = "";
-		String endTimeString = "";
-		if (errorMessageClass != null || errorMessageLink != null) {
+		String minLongString = "";
+		if (errorMessageClass != null || errorMessageLink != null || errorMessageStart != null
+				|| errorMessageClassDNE != null || errorMessageInstructorClass != null) {
 			if (errorMessageClass == null)
 			{
 				errorMessageClass = "";
 			}
-			else if (errorMessageLink == null)
+			if (errorMessageLink == null)
 			{
 				errorMessageLink = "";
+			}
+			if (errorMessageStart == null)
+			{
+				errorMessageStart = "";
+			}
+			if (errorMessageClassDNE == null)
+			{
+				errorMessageClassDNE = "";
+			}
+			if (errorMessageInstructorClass == null)
+			{
+				errorMessageInstructorClass = "";
 			}
 			classString = request.getParameter("class");
 			meetingLimitString = request.getParameter("meetinglimit");
 			timeslotString = request.getParameter("timeslot");
 			linkString = request.getParameter("link");
-			endTimeString = request.getParameter("endtime");
+			minLongString = request.getParameter("minlong");
 		} else {
 			errorMessageClass = "";
 			errorMessageLink = "";
+			errorMessageStart = "";
+			errorMessageClassDNE = "";
+			errorMessageInstructorClass = "";
 		}
 %>
 
@@ -69,6 +88,7 @@
 		</label>
 		<input id="class" name="class" value="<%= classString %>"class="form-control"/>
 		<%= errorMessageClass %>
+		<%= errorMessageClassDNE %>
 	</div>
 	<div class="form-group" id="formmeetinglimit">
 		<label>
@@ -91,15 +111,19 @@
 	</div>
 	<div class="form-group" id="formendtime">
 		<label>
-			End Time (formatted as year:month:day:hour:minute)
+			Enter length of office hours (in minutes)
 		</label>
-		<input id="endtime" name="endtime" value="<%= endTimeString %>"class="form-control"/>
+		<input id="minlong" name="minlong" value="<%= minLongString %>"class="form-control"/>
 	</div>
 	<br/>
 	<button class="bloc-button btn btn-lg btn-block btn-clean btn-d" name = "startOHButton" type="submit" id="startOHButton">
 		Start
 	</button>
+	<%= errorMessageStart %>
 </form>
+
+<%= errorMessageInstructorClass %>
+
 
 <!-- demobody END -->
 

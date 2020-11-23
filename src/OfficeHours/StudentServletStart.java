@@ -39,7 +39,22 @@ public class StudentServletStart extends HttpServlet {
 		models.Class c = DatabaseUtil.getClass(classString);
 		
 		if (request.getParameter("joinOHButton") != null) {
-			s.joinOH(c);
+			if (c == null)
+			{
+				request.setAttribute("errorMessageClassDNE", "Class does not exist");
+				nextPage = "/StudentStart.jsp";
+			}
+			if (!DatabaseUtil.alreadyEnrolled(classString, s.getUserId()))
+			{
+				request.setAttribute("errorMessageStudentClass", "Student is not registered for this class");
+				nextPage = "/StudentStart.jsp";
+			}
+			if (!s.joinOH(c))
+			{
+				request.setAttribute("errorMessageStart", "Unable to join office hours");
+				nextPage = "/StudentStart.jsp";
+			}
+			
 			try {
 				Thread.sleep(5000);
 			}catch(InterruptedException e) {
@@ -48,9 +63,10 @@ public class StudentServletStart extends HttpServlet {
 			
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextPage);
 			dispatcher.forward(request, response);
-		
 		}
-
+		
+		
+		
 	}
 
 	/**

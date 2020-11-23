@@ -71,11 +71,11 @@ public class Class
 	}
 	
 	public OfficeHours startOH(int meetingLimit, double timeSlot, String link,
-			ZoneId timezone, ZonedDateTime startTime, String endTime)
+			ZoneId timezone, ZonedDateTime startTime, ZonedDateTime endTime, String classCode)
 	{
-		oh = new OfficeHours (instructor, meetingLimit, timeSlot, link, timezone, startTime, endTime);
+		oh = new OfficeHours (instructor, meetingLimit, timeSlot, link, timezone, startTime, endTime, classCode);
 		oh.initSemaphore();
-		System.out.println(ZonedDateTime.now(timezone) + "OH OPEN CORRECT");
+		OfficeHoursList.addOH(oh);
 		Runnable r = oh;
 		Thread t = new Thread(r);
 		t.start();

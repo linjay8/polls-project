@@ -25,13 +25,15 @@ public class OfficeHours implements Runnable {
 	private ZoneId timezone;
 	private ZonedDateTime startTime;
 	private ZonedDateTime endTime;
+	private String classCode;
+	
+	private ServerSocket ss;
+	private PrintWriter pw;
 	
 	private transient Semaphore semaphore;
-	
-	private LinkRoom lr;
-	
+		
 	public OfficeHours (Instructor i, int meetingLimit, double timeSlot, String link, ZoneId timezone,
-			ZonedDateTime startTime, String endTime)
+			ZonedDateTime startTime, ZonedDateTime endTime, String classCode)
 	{
 		this.i = i;
 		this.meetingLimit = meetingLimit;
@@ -44,14 +46,17 @@ public class OfficeHours implements Runnable {
 		this.waitingList = new Vector<Student>();
 		
 		this.timezone = timezone;
-		// break up input by colons and trim extra whitespace
-		// string input format = year:month:dayOfMonth:hour:minute
 		this.startTime = startTime;
-		String[] endVals = endTime.split(":");
-		this.endTime = ZonedDateTime.of(Integer.parseInt(endVals[0]), Integer.parseInt(endVals[1]),
-				Integer.parseInt(endVals[2]), Integer.parseInt(endVals[3]), Integer.parseInt(endVals[4]),
-				0, 0, timezone);
-		lr = new LinkRoom(6789, link);
+		this.endTime = endTime;
+		this.classCode = classCode;
+		
+		try {
+			this.ss = new ServerSocket(6789);
+			// time for student to accept meeting invite
+			ss.setSoTimeout(30000);
+			this.pw = null;
+		} catch (IOException e) {}
+		System.out.println(startTime + " Instructor " + i.getFullName() + " is starting OH");
 	}
 	
 	public ArrayList<Student> getStudentsInMeeting()
@@ -73,6 +78,16 @@ public class OfficeHours implements Runnable {
 			studentsReturn.add(s);
 		}
 		return studentsReturn;
+	}
+	
+	public ZoneId getTimezone()
+	{
+		return timezone;
+	}
+	
+	public String getClassCode()
+	{
+		return classCode;
 	}
 	
 	public int getMeetingLimit()
@@ -134,32 +149,37 @@ public class OfficeHours implements Runnable {
 	
 	public void addStudentToMeeting(Student student)
 	{
-		inMeeting.add(student);
-		meetingSize++;
-		
-		//System.out.println ("Transferring student " + student.getFullName() + " from waitlist to meeting");
-		
-		ClientThread ct = new ClientThread(student, "localhost", 6789);
-		ct.start();
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e2) {}
-		
-		ct.getLink();
-
-		
-		// student has 1 min to join and then their time slot starts
-		try {
-			Thread.sleep(60,000);
-		} catch (InterruptedException e1) {}
-		
-		student.start();
-		
 		try
 		{
 			semaphore.acquire();
 		}
 		catch (InterruptedException e) {}
+		
+		System.out.println (ZonedDateTime.now(timezone) + " Inviting student " + student.getFullName() + " from waiting list to meeting");
+		
+				
+		try {
+			System.out.println("Run ClientThread.Java now");
+			System.out.println("Note: If this was on webpage, clicking a button would run "
+					+ "ClientThread.java automatically");
+			
+			Socket s = ss.accept();
+			pw = new PrintWriter(s.getOutputStream(), true);
+			System.out.println(ZonedDateTime.now(timezone) + " Sending to " + student.getFullName() + ": " + link);
+			pw.println(link);
+			pw.flush();
+			pw.close();
+			s.close();
+			inMeeting.add(student);
+			meetingSize++;
+			
+			student.start();
+		}
+		catch (SocketTimeoutException st) 
+		{
+			semaphore.release();
+		}
+		catch (IOException e2) {}
 	}
 	
 	public void removeStudentFromMeeting(Student student)
@@ -167,7 +187,7 @@ public class OfficeHours implements Runnable {
 		inMeeting.remove(student);
 		meetingSize--;
 		semaphore.release();
-		System.out.println (ZonedDateTime.now(timezone) + ": Student " + student.getFullName() + " is leaving meeting");
+		System.out.println (ZonedDateTime.now(timezone) + " Student " + student.getFullName() + " is leaving meeting");
 	}
 	
 	public void initSemaphore()
@@ -177,6 +197,7 @@ public class OfficeHours implements Runnable {
 
 	@Override
 	public void run() {
+		System.out.println(ZonedDateTime.now(timezone) + " OFFICE HOURS ARE OPEN");
 		while (ohOpen())
 		{
 			while (!waitingList.isEmpty())
@@ -190,8 +211,7 @@ public class OfficeHours implements Runnable {
 				}
 			}
 		}
-		// close LinkRoom
-		lr = null;
+		System.out.println(ZonedDateTime.now(timezone) + " OFFICE HOURS ARE CLOSED");
 	}
 	
 }
